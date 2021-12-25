@@ -1,0 +1,4 @@
+*.o
+pacman
+moc_*
+.qmake.stash
