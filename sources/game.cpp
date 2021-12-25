@@ -2,7 +2,7 @@
 
 #include <QGraphicsRectItem>
 #include <QTimer>
-
+#include <iostream>
 Game::Game(QWidget* parent) : QGraphicsView(parent)
 {
     // initialize members
@@ -28,13 +28,20 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
 
     // add Items to scene
     scene->addItem(player);
-    player->setPos(Board::cellToPx(1, 1).x + PIXELS_PER_UNIT / 2, Board::cellToPx(1, 1).y + PIXELS_PER_UNIT);
+    // this sets player's topleft to center of the correct cell.
+    player->setPos(Board::cellToPx(1, 1).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
+                   Board::cellToPx(1, 1).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
+    // this sets palyer's center to be in the cell's center
+    player->setPos(player->x() - player->pixmap().rect().width() / 2,
+                   player->y() - player->pixmap().rect().height() / 2);
 
     // debug:  add a white rect for active cell where players center is:
     QGraphicsRectItem* debugRect = new QGraphicsRectItem();
     Position playerCell = player->getOccupiedCell();
-    playerCell = Board::cellToPx(playerCell.x, playerCell.y); // reuse for
-    debugRect->setRect(playerCell.x, playerCell.y, 8 * SCALE_FACTOR, 8 * SCALE_FACTOR);
+    std::cout << "player's cell: " << playerCell.x << ", " << playerCell.y << '\n';
+    Position rectPos = Board::cellToPx(playerCell.x, playerCell.y);
+    std::cout << "rect pos top left: " << rectPos.x << ", " << rectPos.y << '\n';
+    debugRect->setRect(rectPos.x, rectPos.y, 8 * SCALE_FACTOR, 8 * SCALE_FACTOR);
     debugRect->setBrush(Qt::white);
     scene->addItem(debugRect);
 }

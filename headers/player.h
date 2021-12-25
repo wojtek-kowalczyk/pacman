@@ -24,7 +24,7 @@ class Player : public QObject, public QGraphicsPixmapItem
 
   public:
     Player();
-    Position getOccupiedCell();
+    Position getOccupiedCell(); // get the cell that player's CENTER is in
     void setMoveDirection(MoveDirection);
     void setFacingDirection(MoveDirection);
     void keyPressEvent(QKeyEvent* event);

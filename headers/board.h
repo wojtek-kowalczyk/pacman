@@ -21,10 +21,10 @@ class Board
     static char board[TRUE_SCREEN_HEIGHT / PIXELS_PER_UNIT][TRUE_SCREEN_WIDTH / PIXELS_PER_UNIT];
 
   public:
-    // returns topleft of grid cell in pixel coordinates
+    // returns topleft of grid cell in pixel coordinates (considers SCALE_FACTOR)
     static Position cellToPx(int cellX, int cellY);
 
-    // retuns cell coordinates for given pixel coorinates
+    // retuns cell coordinates for given pixel coorinates (considers SCALE_FACTOR)
     static Position pxToCell(int screenX, int screenY);
 
     // return the value of a cell at given CELL position

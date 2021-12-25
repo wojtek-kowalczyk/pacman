@@ -34,10 +34,9 @@ void Player::keyPressEvent(QKeyEvent* event)
         setMoveDirection(DOWN);
     }
 }
-
 Position Player::getOccupiedCell()
 {
-    return Board::pxToCell(x(), y());
+    return Board::pxToCell(x() + pixmap().rect().width() / 2, y() + pixmap().rect().height() / 2);
 }
 
 bool Player::canMove()

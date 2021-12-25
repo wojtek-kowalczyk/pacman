@@ -38,10 +38,12 @@ Position Board::cellToPx(int cellX, int cellY)
 {
     return Position{cellX * PIXELS_PER_UNIT * SCALE_FACTOR, cellY * PIXELS_PER_UNIT * SCALE_FACTOR};
 }
+
 Position Board::pxToCell(int screenX, int screenY)
 {
     return Position{screenX / (PIXELS_PER_UNIT * SCALE_FACTOR), screenY / (PIXELS_PER_UNIT * SCALE_FACTOR)};
 }
+
 int Board::query(Position p)
 {
     return board[p.x][p.y];
