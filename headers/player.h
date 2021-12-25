@@ -20,6 +20,7 @@ class Player : public QObject, public QGraphicsPixmapItem
   private:
     MoveDirection moveDirection;
     MoveDirection facingDirection;
+    QGraphicsRectItem* DEBUG_cell;
     bool canMove();
 
   public:
@@ -29,6 +30,7 @@ class Player : public QObject, public QGraphicsPixmapItem
     void setFacingDirection(MoveDirection);
     void keyPressEvent(QKeyEvent* event);
   public slots:
+    void DEBUG_drawCell();
     void move();
     // signals:
 };

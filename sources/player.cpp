@@ -41,8 +41,21 @@ Position Player::getOccupiedCell()
 
 bool Player::canMove()
 {
+    return true; // temp
     Position playerPos{Board::pxToCell(x(), y())};
     return Board::query(playerPos) != 0;
+}
+
+#include <QGraphicsScene>
+void Player::DEBUG_drawCell()
+{
+    // debug:  make the current player's cell "light up"
+    delete DEBUG_cell;
+    DEBUG_cell = new QGraphicsRectItem();
+    Position pos = Board::cellToPx(getOccupiedCell().x, getOccupiedCell().y);
+    DEBUG_cell->setRect(pos.x, pos.y, 8 * SCALE_FACTOR, 8 * SCALE_FACTOR);
+    DEBUG_cell->setBrush(Qt::white);
+    scene()->addItem(DEBUG_cell);
 }
 
 void Player::move()

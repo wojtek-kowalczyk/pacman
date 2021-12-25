@@ -1,8 +1,6 @@
 #include "headers/game.h"
 
-#include <QGraphicsRectItem>
 #include <QTimer>
-#include <iostream>
 Game::Game(QWidget* parent) : QGraphicsView(parent)
 {
     // initialize members
@@ -24,7 +22,8 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     // main event loop timer
     QTimer* timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), player, SLOT(move()));
-    // timer->start(1000 / FPS);
+    QObject::connect(timer, SIGNAL(timeout()), player, SLOT(DEBUG_drawCell()));
+    timer->start(1000 / FPS);
 
     // add Items to scene
     scene->addItem(player);
@@ -34,14 +33,4 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     // this sets palyer's center to be in the cell's center
     player->setPos(player->x() - player->pixmap().rect().width() / 2,
                    player->y() - player->pixmap().rect().height() / 2);
-
-    // debug:  add a white rect for active cell where players center is:
-    QGraphicsRectItem* debugRect = new QGraphicsRectItem();
-    Position playerCell = player->getOccupiedCell();
-    std::cout << "player's cell: " << playerCell.x << ", " << playerCell.y << '\n';
-    Position rectPos = Board::cellToPx(playerCell.x, playerCell.y);
-    std::cout << "rect pos top left: " << rectPos.x << ", " << rectPos.y << '\n';
-    debugRect->setRect(rectPos.x, rectPos.y, 8 * SCALE_FACTOR, 8 * SCALE_FACTOR);
-    debugRect->setBrush(Qt::white);
-    scene->addItem(debugRect);
 }
