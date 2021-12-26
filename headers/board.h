@@ -5,7 +5,7 @@
 
 // ? Why does this work?  Shouldn't the default constructor be with empty body and empty init list?
 // ? ~ Pos p1 {3,3}; // gives -> p1.x = 3, p1.y =3
-struct Position
+struct Vector2
 {
     int x;
     int y;
@@ -24,10 +24,10 @@ class Board
     static char board[rows][cols];
 
     // returns topleft of grid cell in pixel coordinates (considers SCALE_FACTOR)
-    static Position cellToPx(int cellX, int cellY);
+    static Vector2 cellToPx(int row, int col);
 
     // retuns cell coordinates for given pixel coorinates (considers SCALE_FACTOR)
-    static Position pxToCell(int screenX, int screenY);
+    static Vector2 pxToCell(int screenX, int screenY);
 
     // return the value of a cell at given CELL position
     static int query(int row, int col);

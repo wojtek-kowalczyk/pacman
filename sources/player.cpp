@@ -42,10 +42,13 @@ void Player::keyPressEvent(QKeyEvent* event)
     {
         setRequestedDirection(DOWN);
     }
-    move();
+    else // debug:: advance with space for example. setting dir doesn't move
+    {
+        move();
+    }
 }
 
-Position Player::getOccupiedCell()
+Vector2 Player::getOccupiedCell()
 {
     return Board::pxToCell(x() + pixmap().rect().width() / 2, y() + pixmap().rect().height() / 2);
 }
@@ -82,7 +85,7 @@ void Player::DEBUG_drawCell()
     // debug:  make the current player's cell "light up"
     delete DEBUG_cell;
     DEBUG_cell = new QGraphicsRectItem();
-    Position pos = Board::cellToPx(getOccupiedCell().x, getOccupiedCell().y);
+    Vector2 pos = Board::cellToPx(getOccupiedCell().x, getOccupiedCell().y);
     DEBUG_cell->setRect(pos.x, pos.y, 8 * SCALE_FACTOR, 8 * SCALE_FACTOR);
     DEBUG_cell->setBrush(Qt::white);
     scene()->addItem(DEBUG_cell);
@@ -92,7 +95,7 @@ void Player::move()
 {
     std::cout << "trying to move the player\n";
     // see if can move in the requested direction
-    Position playerCell{getOccupiedCell()};
+    Vector2 playerCell{getOccupiedCell()};
     std::cout << "player in cell: " << playerCell.x << ", " << playerCell.y << '\n';
     switch (requestedDirection)
     {
@@ -126,23 +129,23 @@ void Player::move()
     }
 
     std::cout << "can, moving\n";
-    Position dir;
+    Vector2 dir;
     switch (moveDirection)
     {
     case LEFT:
-        dir = Position{-1, 0};
+        dir = Vector2{-1, 0};
         break;
     case RIGHT:
-        dir = Position{1, 0};
+        dir = Vector2{1, 0};
         break;
     case UP:
-        dir = Position{0, -1};
+        dir = Vector2{0, -1};
         break;
     case DOWN:
-        dir = Position{0, 1};
+        dir = Vector2{0, 1};
         break;
     default:
-        dir = Position{-1, 0};
+        dir = Vector2{-1, 0};
         break;
     }
     setPos(x() + dir.x * PLAYER_MOVE_SPEED, y() + dir.y * PLAYER_MOVE_SPEED);
