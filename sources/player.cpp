@@ -1,17 +1,26 @@
 #include "headers/player.h"
+#include <iostream>
 
 Player::Player()
 {
     QPixmap pm("resources/pacman.png");
     setPixmap(pm.scaled(pm.rect().width() * SCALE_FACTOR, pm.rect().height() * SCALE_FACTOR));
     moveDirection = LEFT;
+    requestedDirection = LEFT;
 }
 
-void Player::setMoveDirection(MoveDirection md)
+void Player::setMoveDirection(Direction dir)
 {
-    if (md != moveDirection)
+    if (dir != moveDirection)
     {
-        moveDirection = md;
+        moveDirection = dir;
+    }
+}
+void Player::setRequestedDirection(Direction dir)
+{
+    if (dir != requestedDirection)
+    {
+        requestedDirection = dir;
     }
 }
 
@@ -19,31 +28,52 @@ void Player::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Left)
     {
-        setMoveDirection(LEFT);
+        setRequestedDirection(LEFT);
     }
     else if (event->key() == Qt::Key_Right)
     {
-        setMoveDirection(RIGHT);
+        setRequestedDirection(RIGHT);
     }
     else if (event->key() == Qt::Key_Up)
     {
-        setMoveDirection(UP);
+        setRequestedDirection(UP);
     }
     else if (event->key() == Qt::Key_Down)
     {
-        setMoveDirection(DOWN);
+        setRequestedDirection(DOWN);
     }
+    move();
 }
+
 Position Player::getOccupiedCell()
 {
     return Board::pxToCell(x() + pixmap().rect().width() / 2, y() + pixmap().rect().height() / 2);
 }
 
+// returns true if the next cell in movedirection is not a wall
 bool Player::canMove()
 {
-    return true; // temp
-    Position playerPos{Board::pxToCell(x(), y())};
-    return Board::query(playerPos) != 0;
+    int row = getOccupiedCell().x;
+    int col = getOccupiedCell().y;
+    switch (moveDirection)
+    {
+    case LEFT:
+        col += -1;
+        break;
+    case RIGHT:
+        col += 1;
+        break;
+    case UP:
+        row += -1;
+        break;
+    case DOWN:
+        row += 1;
+        break;
+    default:
+        break;
+    }
+    std::cout << "INSIDE canMove(): querying board at " << row << ", " << col << '\n';
+    return Board::query(row, col) != 0;
 }
 
 #include <QGraphicsScene>
@@ -60,33 +90,60 @@ void Player::DEBUG_drawCell()
 
 void Player::move()
 {
-    if (!canMove())
-    {
-        return;
-    }
-    int _x, _y;
-    switch (this->moveDirection)
+    std::cout << "trying to move the player\n";
+    // see if can move in the requested direction
+    Position playerCell{getOccupiedCell()};
+    std::cout << "player in cell: " << playerCell.x << ", " << playerCell.y << '\n';
+    switch (requestedDirection)
     {
     case LEFT:
-        _x = -1;
-        _y = 0;
+        playerCell.y += -1;
         break;
     case RIGHT:
-        _x = 1;
-        _y = 0;
+        playerCell.y += 1;
         break;
     case UP:
-        _y = -1;
-        _x = 0;
+        playerCell.x += -1;
         break;
     case DOWN:
-        _y = 1;
-        _x = 0;
+        playerCell.x += 1;
         break;
     default:
-        _x = -1;
-        _y = 0;
         break;
     }
-    setPos(x() + _x * PLAYER_MOVE_SPEED, y() + _y * PLAYER_MOVE_SPEED);
+    std::cout << "requested cell: " << playerCell.x << ", " << playerCell.y << '\n';
+    if (Board::query(playerCell.x, playerCell.y) != 0)
+    {
+        std::cout << "setting movedir to requested dir\n";
+        setMoveDirection(requestedDirection);
+    }
+
+    std::cout << "checking if can move\n";
+    if (!canMove())
+    {
+        std::cout << "can't, returning\n";
+        return;
+    }
+
+    std::cout << "can, moving\n";
+    Position dir;
+    switch (moveDirection)
+    {
+    case LEFT:
+        dir = Position{-1, 0};
+        break;
+    case RIGHT:
+        dir = Position{1, 0};
+        break;
+    case UP:
+        dir = Position{0, -1};
+        break;
+    case DOWN:
+        dir = Position{0, 1};
+        break;
+    default:
+        dir = Position{-1, 0};
+        break;
+    }
+    setPos(x() + dir.x * PLAYER_MOVE_SPEED, y() + dir.y * PLAYER_MOVE_SPEED);
 }

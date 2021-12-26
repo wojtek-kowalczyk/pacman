@@ -16,11 +16,13 @@ struct Position
 // the area from px(24+8, 16+8), with the right and bottom edge EXCLUDED, belonging to next cell.
 class Board
 {
-  private:
-    // 0 wall, 1 path
-    static char board[TRUE_SCREEN_HEIGHT / PIXELS_PER_UNIT][TRUE_SCREEN_WIDTH / PIXELS_PER_UNIT];
-
   public:
+    static constexpr int rows = TRUE_SCREEN_HEIGHT / PIXELS_PER_UNIT;
+    static constexpr int cols = TRUE_SCREEN_WIDTH / PIXELS_PER_UNIT;
+
+    // 0 wall, 1 path
+    static char board[rows][cols];
+
     // returns topleft of grid cell in pixel coordinates (considers SCALE_FACTOR)
     static Position cellToPx(int cellX, int cellY);
 
@@ -28,7 +30,7 @@ class Board
     static Position pxToCell(int screenX, int screenY);
 
     // return the value of a cell at given CELL position
-    static int query(Position p);
+    static int query(int row, int col);
 };
 
 #endif

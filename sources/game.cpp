@@ -1,6 +1,6 @@
 #include "headers/game.h"
-
 #include <QTimer>
+#include <iostream>
 Game::Game(QWidget* parent) : QGraphicsView(parent)
 {
     // initialize members
@@ -23,7 +23,21 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     QTimer* timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), player, SLOT(move()));
     QObject::connect(timer, SIGNAL(timeout()), player, SLOT(DEBUG_drawCell()));
-    timer->start(1000 / FPS);
+    // timer->start(1000 / FPS);
+    // timer->start(1000); // DEBUG SLOW MO
+
+    // draw cells to represent the board
+    for (int row = 0; row < Board::rows; row++)
+    {
+        for (int col = 0; col < Board::cols; col++)
+        {
+            std::cout << "drawing cell  " << row << col << '\n';
+            QGraphicsRectItem* cell = new QGraphicsRectItem();
+            cell->setRect(Board::cellToPx(row, col).x, Board::cellToPx(row, col).y, 8 * SCALE_FACTOR, 8 * SCALE_FACTOR);
+            cell->setBrush((Board::query(row, col) == 0) ? Qt::white : Qt::yellow);
+            scene->addItem(cell);
+        }
+    }
 
     // add Items to scene
     scene->addItem(player);

@@ -1,6 +1,6 @@
 #include "headers/board.h"
 
-char Board::board[TRUE_SCREEN_HEIGHT / PIXELS_PER_UNIT][TRUE_SCREEN_WIDTH / PIXELS_PER_UNIT] = {
+char Board::board[rows][cols] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -36,15 +36,21 @@ char Board::board[TRUE_SCREEN_HEIGHT / PIXELS_PER_UNIT][TRUE_SCREEN_WIDTH / PIXE
 
 Position Board::cellToPx(int cellX, int cellY)
 {
-    return Position{cellX * PIXELS_PER_UNIT * SCALE_FACTOR, cellY * PIXELS_PER_UNIT * SCALE_FACTOR};
+    // when I type cellToPx(2,3) i want to get topleft in pixel coords of cell in row 2, column 3
+    return Position{cellY * PIXELS_PER_UNIT * SCALE_FACTOR, cellX * PIXELS_PER_UNIT * SCALE_FACTOR};
 }
 
 Position Board::pxToCell(int screenX, int screenY)
 {
-    return Position{screenX / (PIXELS_PER_UNIT * SCALE_FACTOR), screenY / (PIXELS_PER_UNIT * SCALE_FACTOR)};
+    // when I type pxToCell(53, 36) i want cell that has this point inside. 53 -> 53px right, 36 -> 36px down
+    return Position{screenY / (PIXELS_PER_UNIT * SCALE_FACTOR), screenX / (PIXELS_PER_UNIT * SCALE_FACTOR)};
 }
 
-int Board::query(Position p)
+int Board::query(int row, int col)
 {
-    return board[p.x][p.y];
+    if (row < 0 || row > rows)
+        return false;
+    if (col < 0 || col > cols)
+        return false;
+    return board[row][col];
 }

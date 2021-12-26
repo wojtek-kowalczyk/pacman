@@ -7,7 +7,7 @@
 #include <QKeyEvent>
 #include <QObject>
 
-enum MoveDirection
+enum Direction
 {
     UP,
     DOWN,
@@ -18,16 +18,16 @@ class Player : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
   private:
-    MoveDirection moveDirection;
-    MoveDirection facingDirection;
+    Direction moveDirection;
+    Direction requestedDirection;
     QGraphicsRectItem* DEBUG_cell;
     bool canMove();
 
   public:
     Player();
     Position getOccupiedCell(); // get the cell that player's CENTER is in
-    void setMoveDirection(MoveDirection);
-    void setFacingDirection(MoveDirection);
+    void setMoveDirection(Direction);
+    void setRequestedDirection(Direction);
     void keyPressEvent(QKeyEvent* event);
   public slots:
     void DEBUG_drawCell();
