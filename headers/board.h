@@ -20,7 +20,7 @@ class Board
     static constexpr int rows = TRUE_SCREEN_HEIGHT / PIXELS_PER_UNIT;
     static constexpr int cols = TRUE_SCREEN_WIDTH / PIXELS_PER_UNIT;
 
-    // 0 wall, 1 path
+    // 0 wall, 1 path with small point, 2 path with no point, 3 path with big point
     static char board[rows][cols];
 
     // returns topleft of grid cell in pixel coordinates (considers SCALE_FACTOR)

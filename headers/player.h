@@ -22,6 +22,9 @@ class Player : public QObject, public QGraphicsPixmapItem
     Direction requestedDirection; // the direcion we want the palyer to move when it's possible
     QGraphicsRectItem* DEBUG_cell;
     bool canMove();
+    QPixmap sprite;
+    QPixmap sprites[4];
+    void setSprite(Direction dir); // sets and correctly resizes sprite for given direction. updates display.
 
   public:
     Player();

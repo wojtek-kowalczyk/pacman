@@ -1,6 +1,8 @@
 #include "headers/game.h"
 #include <QTimer>
 #include <iostream>
+// #define GAME_DEBUG
+
 Game::Game(QWidget* parent) : QGraphicsView(parent)
 {
     // initialize members
@@ -22,22 +24,28 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     // main event loop timer
     QTimer* timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), player, SLOT(move()));
-    QObject::connect(timer, SIGNAL(timeout()), player, SLOT(DEBUG_drawCell()));
-    // timer->start(1000 / FPS);
-    // timer->start(1000); // DEBUG SLOW MO
+    timer->start(1000 / FPS);
+    // timer->start(1000 * 3 / FPS); // 3 times slower
 
+#ifdef GAME_DEBUG
+    QObject::connect(timer, SIGNAL(timeout()), player, SLOT(DEBUG_drawCell()));
     // draw cells to represent the board
     for (int row = 0; row < Board::rows; row++)
     {
         for (int col = 0; col < Board::cols; col++)
         {
-            std::cout << "drawing cell  " << row << col << '\n';
             QGraphicsRectItem* cell = new QGraphicsRectItem();
             cell->setRect(Board::cellToPx(row, col).x, Board::cellToPx(row, col).y, 8 * SCALE_FACTOR, 8 * SCALE_FACTOR);
-            cell->setBrush((Board::query(row, col) == 0) ? Qt::white : Qt::yellow);
+            cell->setBrush((Board::query(row, col) == 0) ? Qt::white
+                                                         : ((Board::query(row, col) == 1)   ? Qt::yellow
+                                                            : (Board::query(row, col) == 2) ? Qt::red
+                                                                                            : Qt::black));
+
+            cell->setOpacity(0.5);
             scene->addItem(cell);
         }
     }
+#endif
 
     // add Items to scene
     scene->addItem(player);

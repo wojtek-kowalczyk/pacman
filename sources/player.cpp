@@ -3,10 +3,21 @@
 
 Player::Player()
 {
-    QPixmap pm("resources/pacman.png");
-    setPixmap(pm.scaled(pm.rect().width() * SCALE_FACTOR, pm.rect().height() * SCALE_FACTOR));
+    sprites[UP] = QPixmap("resources/pacman-up.png");
+    sprites[DOWN] = QPixmap("resources/pacman-down.png");
+    sprites[LEFT] = QPixmap("resources/pacman-left.png");
+    sprites[RIGHT] = QPixmap("resources/pacman-right.png");
+
+    setSprite(LEFT);
     moveDirection = LEFT;
     requestedDirection = LEFT;
+}
+
+void Player::setSprite(Direction dir)
+{
+    sprite = sprites[dir];
+    sprite = sprite.scaled(sprite.rect().width() * SCALE_FACTOR, sprite.rect().height() * SCALE_FACTOR);
+    setPixmap(sprite);
 }
 
 void Player::setMoveDirection(Direction dir)
@@ -14,6 +25,8 @@ void Player::setMoveDirection(Direction dir)
     if (dir != moveDirection)
     {
         moveDirection = dir;
+        // set the sprite to face in the right direction
+        setSprite(moveDirection);
     }
 }
 void Player::setRequestedDirection(Direction dir)
@@ -50,7 +63,7 @@ void Player::keyPressEvent(QKeyEvent* event)
 
 Vector2 Player::getOccupiedCell()
 {
-    return Board::pxToCell(x() + pixmap().rect().width() / 2, y() + pixmap().rect().height() / 2);
+    return Board::pxToCell(x() + pixmap().width() / 2, y() + pixmap().height() / 2);
 }
 
 // returns true if the next cell in movedirection is not a wall
@@ -75,7 +88,6 @@ bool Player::canMove()
     default:
         break;
     }
-    std::cout << "INSIDE canMove(): querying board at " << row << ", " << col << '\n';
     return Board::query(row, col) != 0;
 }
 
@@ -93,10 +105,8 @@ void Player::DEBUG_drawCell()
 
 void Player::move()
 {
-    std::cout << "trying to move the player\n";
     // see if can move in the requested direction
     Vector2 playerCell{getOccupiedCell()};
-    std::cout << "player in cell: " << playerCell.x << ", " << playerCell.y << '\n';
     switch (requestedDirection)
     {
     case LEFT:
@@ -114,21 +124,25 @@ void Player::move()
     default:
         break;
     }
-    std::cout << "requested cell: " << playerCell.x << ", " << playerCell.y << '\n';
     if (Board::query(playerCell.x, playerCell.y) != 0)
     {
-        std::cout << "setting movedir to requested dir\n";
-        setMoveDirection(requestedDirection);
+        if (moveDirection != requestedDirection)
+        {
+            setMoveDirection(requestedDirection);
+            // snap player to the center of the cell
+            Vector2 targetPos{Board::cellToPx(getOccupiedCell().x, getOccupiedCell().y)};
+            targetPos.x += PIXELS_PER_UNIT * SCALE_FACTOR / 2;
+            targetPos.y += PIXELS_PER_UNIT * SCALE_FACTOR / 2;
+            setPos(targetPos.x - pixmap().width() / 2, targetPos.y - pixmap().height() / 2);
+            // ! when player hits the wall they stop a bit out of line, there is no snapping to the center of a cell
+        }
     }
 
-    std::cout << "checking if can move\n";
     if (!canMove())
     {
-        std::cout << "can't, returning\n";
         return;
     }
 
-    std::cout << "can, moving\n";
     Vector2 dir;
     switch (moveDirection)
     {
