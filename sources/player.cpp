@@ -191,5 +191,11 @@ void Player::move()
         break;
     }
     setPos(x() + dir.x * PLAYER_MOVE_SPEED, y() + dir.y * PLAYER_MOVE_SPEED);
+    // edge teleportation
+    if (x() < 0)
+        setPos(x() + scene()->width(), y());
+    else if (x() > scene()->width())
+        setPos(x() - scene()->width(), y());
+    // not adding vertical case -> same reason as in Board::query
     checkCollisions();
 }

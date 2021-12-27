@@ -54,9 +54,14 @@ Vector2 Board::pxToCell(int screenX, int screenY)
 
 int Board::query(int row, int col)
 {
-    if (row < 0 || row > rows)
+    // edge teleportation special case
+    if ((col < 0 && board[row][cols - 1] != 0) || (col >= cols && board[row][0] != 0))
+        return true;
+    // I'm not adding vertical case - no point -> not gonna scale this game anyway
+
+    if (row < 0 || row > rows - 1)
         return false;
-    if (col < 0 || col > cols)
+    if (col < 0 || col > cols - 1)
         return false;
     return board[row][col];
 }
