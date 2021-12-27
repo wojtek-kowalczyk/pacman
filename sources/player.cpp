@@ -1,4 +1,5 @@
 #include "headers/player.h"
+#include "headers/collectible.h"
 #include <iostream>
 
 Player::Player()
@@ -11,6 +12,28 @@ Player::Player()
     setSprite(LEFT);
     moveDirection = LEFT;
     requestedDirection = LEFT;
+
+    hitbox = new QGraphicsRectItem();
+    hitbox->setParentItem(this);
+    hitbox->setRect(x() + HITBOX_SHRINK, y() + HITBOX_SHRINK, pixmap().width() - 2 * HITBOX_SHRINK,
+                    pixmap().height() - 2 * HITBOX_SHRINK);
+    // hitbox->setVisible(false);
+}
+
+void Player::checkCollisions()
+{
+    QList<QGraphicsItem*> colliding = hitbox->collidingItems();
+    for (int i = 0; i < colliding.size(); i++)
+    {
+        if (typeid(*(colliding[i])) == typeid(Collectible))
+        {
+            // todo - replace workaround
+            // how do I access members of Collectible here?
+            // virtual method allows the use of pointer to a base class, but I can't add my methods to the base class.
+            // I NEED TO CALL MY METHOD ON COLLECTIBLE. now it's called in the destructor - seems wrong
+            delete colliding[i];
+        }
+    }
 }
 
 void Player::setSprite(Direction dir)
@@ -22,6 +45,7 @@ void Player::setSprite(Direction dir)
 void Player::addScore(int score)
 {
     this->score += score;
+    std::cout << "Player's score: " << this->score << '\n';
 }
 
 void Player::setMoveDirection(Direction dir)
@@ -167,4 +191,5 @@ void Player::move()
         break;
     }
     setPos(x() + dir.x * PLAYER_MOVE_SPEED, y() + dir.y * PLAYER_MOVE_SPEED);
+    checkCollisions();
 }

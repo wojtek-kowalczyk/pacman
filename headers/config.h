@@ -12,3 +12,4 @@ constexpr int PIXELS_PER_UNIT = 8;
 constexpr int POINTS_SMALL = 100;
 constexpr int POINTS_BIG = 200;
 constexpr int POINTS_GHOST = 400;
+constexpr int HITBOX_SHRINK = 6 * SCALE_FACTOR;

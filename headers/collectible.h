@@ -11,6 +11,8 @@ class Collectible : public QObject, public QGraphicsPixmapItem
 
   public:
     Collectible(int value, QPixmap sprite);
+    // having destructor only to invoke the event seems wrong...
+    ~Collectible(); // violation of rule of three
   public slots:
     void collect();
   signals:
