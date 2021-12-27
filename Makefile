@@ -53,11 +53,15 @@ OBJECTS_DIR   = ./
 SOURCES       = sources/board.cpp \
 		sources/game.cpp \
 		sources/main.cpp \
-		sources/player.cpp moc_player.cpp
+		sources/player.cpp \
+		sources/scorepoint.cpp moc_collectible.cpp \
+		moc_player.cpp
 OBJECTS       = board.o \
 		game.o \
 		main.o \
 		player.o \
+		scorepoint.o \
+		moc_collectible.o \
 		moc_player.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -133,6 +137,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		pacman.pro headers/board.h \
+		headers/collectible.h \
 		headers/config.h \
 		headers/enemy.h \
 		headers/enemyRed.h \
@@ -140,7 +145,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		headers/player.h sources/board.cpp \
 		sources/game.cpp \
 		sources/main.cpp \
-		sources/player.cpp
+		sources/player.cpp \
+		sources/scorepoint.cpp
 QMAKE_TARGET  = pacman
 DESTDIR       = 
 TARGET        = pacman
@@ -322,8 +328,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents headers/board.h headers/config.h headers/enemy.h headers/enemyRed.h headers/game.h headers/player.h $(DISTDIR)/
-	$(COPY_FILE) --parents sources/board.cpp sources/game.cpp sources/main.cpp sources/player.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents headers/board.h headers/collectible.h headers/config.h headers/enemy.h headers/enemyRed.h headers/game.h headers/player.h $(DISTDIR)/
+	$(COPY_FILE) --parents sources/board.cpp sources/game.cpp sources/main.cpp sources/player.cpp sources/scorepoint.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -355,9 +361,17 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_player.cpp
+compiler_moc_header_make_all: moc_collectible.cpp moc_player.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_player.cpp
+	-$(DEL_FILE) moc_collectible.cpp moc_player.cpp
+moc_collectible.cpp: headers/player.h \
+		headers/board.h \
+		headers/config.h \
+		headers/collectible.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/media/sf_ubuntuShare/CPP/pacman -I/media/sf_ubuntuShare/CPP/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include headers/collectible.h -o moc_collectible.cpp
+
 moc_player.cpp: headers/board.h \
 		headers/config.h \
 		headers/player.h \
@@ -399,6 +413,15 @@ player.o: sources/player.cpp headers/player.h \
 		headers/board.h \
 		headers/config.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o player.o sources/player.cpp
+
+scorepoint.o: sources/scorepoint.cpp headers/collectible.h \
+		headers/player.h \
+		headers/board.h \
+		headers/config.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scorepoint.o sources/scorepoint.cpp
+
+moc_collectible.o: moc_collectible.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_collectible.o moc_collectible.cpp
 
 moc_player.o: moc_player.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_player.o moc_player.cpp

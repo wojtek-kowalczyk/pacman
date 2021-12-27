@@ -9,3 +9,6 @@ constexpr float PLAYER_MOVE_SPEED = 3.0f;
 constexpr float GHOST_MOVE_SPEED = 2.7f;
 constexpr int FPS = 60;
 constexpr int PIXELS_PER_UNIT = 8;
+constexpr int POINTS_SMALL = 100;
+constexpr int POINTS_BIG = 200;
+constexpr int POINTS_GHOST = 400;

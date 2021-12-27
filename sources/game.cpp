@@ -1,4 +1,5 @@
 #include "headers/game.h"
+#include "headers/collectible.h"
 #include <QTimer>
 #include <iostream>
 // #define GAME_DEBUG
@@ -26,6 +27,28 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     QObject::connect(timer, SIGNAL(timeout()), player, SLOT(move()));
     timer->start(1000 / FPS);
     // timer->start(1000 * 3 / FPS); // 3 times slower
+
+    // Add points
+    for (int row = 0; row < Board::rows; row++)
+    {
+        for (int col = 0; col < Board::cols; col++)
+        {
+            Collectible* point;
+            switch (Board::query(row, col))
+            {
+            case 1: // small point
+                point = new Collectible(POINTS_SMALL, QPixmap("resources/point1.png"));
+                break;
+            case 3: // big point
+                point = new Collectible(POINTS_BIG, QPixmap("resources/point2.png"));
+                break;
+            default:
+                continue;
+            }
+            point->setPos(Board::cellToPx(row, col).x, Board::cellToPx(row, col).y);
+            scene->addItem(point);
+        }
+    }
 
 #ifdef GAME_DEBUG
     QObject::connect(timer, SIGNAL(timeout()), player, SLOT(DEBUG_drawCell()));

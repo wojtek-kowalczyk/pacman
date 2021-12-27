@@ -15,9 +15,13 @@ Player::Player()
 
 void Player::setSprite(Direction dir)
 {
-    sprite = sprites[dir];
-    sprite = sprite.scaled(sprite.rect().width() * SCALE_FACTOR, sprite.rect().height() * SCALE_FACTOR);
-    setPixmap(sprite);
+    setPixmap(
+        sprites[dir].scaled(sprites[dir].rect().width() * SCALE_FACTOR, sprites[dir].rect().height() * SCALE_FACTOR));
+}
+
+void Player::addScore(int score)
+{
+    this->score += score;
 }
 
 void Player::setMoveDirection(Direction dir)

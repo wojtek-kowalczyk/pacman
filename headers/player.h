@@ -18,12 +18,12 @@ class Player : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
   private:
+    int score;
     Direction moveDirection;      // actual direction the player is facing and moving
     Direction requestedDirection; // the direcion we want the palyer to move when it's possible
+    QPixmap sprites[4];
     QGraphicsRectItem* DEBUG_cell;
     bool canMove();
-    QPixmap sprite;
-    QPixmap sprites[4];
     void setSprite(Direction dir); // sets and correctly resizes sprite for given direction. updates display.
 
   public:
@@ -35,6 +35,7 @@ class Player : public QObject, public QGraphicsPixmapItem
   public slots:
     void DEBUG_drawCell(); // draw a square representing the current cell player is in.
     void move();
+    void addScore(int value);
     // signals:
 };
 
