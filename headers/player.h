@@ -3,40 +3,27 @@
 
 #include "headers/board.h"
 #include "headers/config.h"
-#include <QGraphicsPixmapItem>
+#include "headers/entity.h"
 #include <QKeyEvent>
-#include <QObject>
 
-enum Direction
+class Player : public Entity
 {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
-class Player : public QObject, public QGraphicsPixmapItem
-{
+    // this macro has to be in derived class as well. Re-run qmake after adding it.
+    // I mean only if it has additional signals the base class doesn't have
     Q_OBJECT
   private:
     int score;
-    Direction moveDirection;      // actual direction the player is facing and moving
-    Direction requestedDirection; // the direcion we want the palyer to move when it's possible
     QPixmap sprites[4];
-    QGraphicsRectItem* DEBUG_cell;
-    QGraphicsRectItem* hitbox;
-    bool canMove();
-    void checkCollisions();
     void setSprite(Direction dir); // sets and correctly resizes sprite for given direction. updates display.
+    void checkCollisions() override;
 
   public:
     Player();
-    Vector2 getOccupiedCell(); // get the cell that player's CENTER is in
-    void setMoveDirection(Direction);
-    void setRequestedDirection(Direction);
     void keyPressEvent(QKeyEvent* event);
+    void setMoveDirection(Direction) override;
+    void move() override;
   public slots:
     void DEBUG_drawCell(); // draw a square representing the current cell player is in.
-    void move();
     void addScore(int value);
     // signals:
 };

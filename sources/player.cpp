@@ -2,6 +2,9 @@
 #include "headers/collectible.h"
 #include <iostream>
 
+//? is this a good idea for the base (abstract) class to have a
+//? default constructor, while this derived classes set base's members?
+
 Player::Player()
 {
     sprites[UP] = QPixmap("resources/pacman-up.png");
@@ -10,8 +13,6 @@ Player::Player()
     sprites[RIGHT] = QPixmap("resources/pacman-right.png");
 
     setSprite(LEFT);
-    moveDirection = LEFT;
-    requestedDirection = LEFT;
 
     hitbox = new QGraphicsRectItem();
     hitbox->setParentItem(this);
@@ -57,13 +58,6 @@ void Player::setMoveDirection(Direction dir)
         setSprite(moveDirection);
     }
 }
-void Player::setRequestedDirection(Direction dir)
-{
-    if (dir != requestedDirection)
-    {
-        requestedDirection = dir;
-    }
-}
 
 void Player::keyPressEvent(QKeyEvent* event)
 {
@@ -87,36 +81,6 @@ void Player::keyPressEvent(QKeyEvent* event)
     {
         move();
     }
-}
-
-Vector2 Player::getOccupiedCell()
-{
-    return Board::pxToCell(x() + pixmap().width() / 2, y() + pixmap().height() / 2);
-}
-
-// returns true if the next cell in movedirection is not a wall
-bool Player::canMove()
-{
-    int row = getOccupiedCell().x;
-    int col = getOccupiedCell().y;
-    switch (moveDirection)
-    {
-    case LEFT:
-        col += -1;
-        break;
-    case RIGHT:
-        col += 1;
-        break;
-    case UP:
-        row += -1;
-        break;
-    case DOWN:
-        row += 1;
-        break;
-    default:
-        break;
-    }
-    return Board::query(row, col) != 0;
 }
 
 #include <QGraphicsScene>
