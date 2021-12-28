@@ -46,7 +46,6 @@ void Player::setSprite(Direction dir)
 void Player::addScore(int score)
 {
     this->score += score;
-    std::cout << "Player's score: " << this->score << '\n';
 }
 
 void Player::setMoveDirection(Direction dir)
@@ -81,18 +80,6 @@ void Player::keyPressEvent(QKeyEvent* event)
     {
         move();
     }
-}
-
-#include <QGraphicsScene>
-void Player::DEBUG_drawCell()
-{
-    // debug:  make the current player's cell "light up"
-    delete DEBUG_cell;
-    DEBUG_cell = new QGraphicsRectItem();
-    Vector2 pos = Board::cellToPx(getOccupiedCell().x, getOccupiedCell().y);
-    DEBUG_cell->setRect(pos.x, pos.y, 8 * SCALE_FACTOR, 8 * SCALE_FACTOR);
-    DEBUG_cell->setBrush(Qt::white);
-    scene()->addItem(DEBUG_cell);
 }
 
 void Player::move()

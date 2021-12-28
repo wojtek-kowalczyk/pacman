@@ -24,6 +24,18 @@ bool Entity::canMove()
     return Board::query(row, col) != 0;
 }
 
+void Entity::DEBUG_drawCell()
+{
+    // debug:  make the current player's cell "light up"
+    if (DEBUG_cell)
+        delete DEBUG_cell;
+    DEBUG_cell = new QGraphicsRectItem();
+    Vector2 pos = Board::cellToPx(getOccupiedCell().x, getOccupiedCell().y);
+    DEBUG_cell->setRect(pos.x, pos.y, 8 * SCALE_FACTOR, 8 * SCALE_FACTOR);
+    DEBUG_cell->setBrush(Qt::white);
+    scene()->addItem(DEBUG_cell);
+}
+
 Vector2 Entity::getOccupiedCell()
 {
     return Board::pxToCell(x() + pixmap().width() / 2, y() + pixmap().height() / 2);

@@ -23,7 +23,6 @@ class Player : public Entity
     void setMoveDirection(Direction) override;
     void move() override;
   public slots:
-    void DEBUG_drawCell(); // draw a square representing the current cell player is in.
     void addScore(int value);
     // signals:
 };

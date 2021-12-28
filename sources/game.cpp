@@ -4,11 +4,19 @@
 #include <iostream>
 // #define GAME_DEBUG
 
+Game* game = nullptr; // this has to be here so that the linker sees it.
+
 Game::Game(QWidget* parent) : QGraphicsView(parent)
 {
+    if (!game)
+        game = this;
+    else
+        abort();
+
     // initialize members
     scene = new QGraphicsScene();
     player = new Player();
+    ghost = new Enemy();
 
     // configuration
     setScene(scene);
@@ -25,8 +33,9 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     // main event loop timer
     QTimer* timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), player, SLOT(move()));
+    QObject::connect(timer, SIGNAL(timeout()), ghost, SLOT(move()));
     timer->start(1000 / FPS);
-    // timer->start(1000 * 3 / FPS); // 3 times slower
+    // timer->start(1000 * 20 / FPS); // 3 times slower
 
     // Add points
     for (int row = 0; row < Board::rows; row++)
@@ -51,8 +60,9 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
         }
     }
 
-#ifdef GAME_DEBUG
     QObject::connect(timer, SIGNAL(timeout()), player, SLOT(DEBUG_drawCell()));
+    QObject::connect(timer, SIGNAL(timeout()), ghost, SLOT(DEBUG_drawCell()));
+#ifdef GAME_DEBUG
     // draw cells to represent the board
     for (int row = 0; row < Board::rows; row++)
     {
@@ -73,10 +83,14 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
 
     // add Items to scene
     scene->addItem(player);
+    scene->addItem(ghost);
     // this sets player's topleft to center of the correct cell.
     player->setPos(Board::cellToPx(1, 1).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
                    Board::cellToPx(1, 1).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
+    ghost->setPos(Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
+                  Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
     // this sets palyer's center to be in the cell's center
     player->setPos(player->x() - player->pixmap().rect().width() / 2,
                    player->y() - player->pixmap().rect().height() / 2);
+    ghost->setPos(ghost->x() - ghost->pixmap().rect().width() / 2, ghost->y() - ghost->pixmap().rect().height() / 2);
 }

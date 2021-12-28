@@ -9,6 +9,7 @@ struct Vector2
 {
     int x;
     int y;
+    static float sqrDistance(Vector2 v1, Vector2 v2);
 };
 
 // topleft cell is determined based on it's topleft. cell(0,0) is a cell that has it's corner

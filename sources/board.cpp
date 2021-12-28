@@ -1,5 +1,4 @@
 #include "headers/board.h"
-
 char Board::board[rows][cols] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
@@ -64,4 +63,10 @@ int Board::query(int row, int col)
     if (col < 0 || col > cols - 1)
         return false;
     return board[row][col];
+}
+
+#include <cmath>
+float Vector2::sqrDistance(Vector2 v1, Vector2 v2)
+{
+    return abs((v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y));
 }

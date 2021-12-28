@@ -32,6 +32,7 @@ SOURCES += sources/board.cpp \
            sources/game.cpp \
            sources/main.cpp \
            sources/player.cpp \
-           sources/scorepoint.cpp
+           sources/scorepoint.cpp \
+           sources/enemy.cpp
 QT += widgets
 QT += gui

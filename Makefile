@@ -55,7 +55,8 @@ SOURCES       = sources/board.cpp \
 		sources/game.cpp \
 		sources/main.cpp \
 		sources/player.cpp \
-		sources/scorepoint.cpp moc_collectible.cpp \
+		sources/scorepoint.cpp \
+		sources/enemy.cpp moc_collectible.cpp \
 		moc_entity.cpp \
 		moc_player.cpp
 OBJECTS       = board.o \
@@ -64,6 +65,7 @@ OBJECTS       = board.o \
 		main.o \
 		player.o \
 		scorepoint.o \
+		enemy.o \
 		moc_collectible.o \
 		moc_entity.o \
 		moc_player.o
@@ -152,7 +154,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		sources/game.cpp \
 		sources/main.cpp \
 		sources/player.cpp \
-		sources/scorepoint.cpp
+		sources/scorepoint.cpp \
+		sources/enemy.cpp
 QMAKE_TARGET  = pacman
 DESTDIR       = 
 TARGET        = pacman
@@ -335,7 +338,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents headers/board.h headers/collectible.h headers/config.h headers/enemy.h headers/enemyRed.h headers/entity.h headers/game.h headers/player.h $(DISTDIR)/
-	$(COPY_FILE) --parents sources/board.cpp sources/entity.cpp sources/game.cpp sources/main.cpp sources/player.cpp sources/scorepoint.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents sources/board.cpp sources/entity.cpp sources/game.cpp sources/main.cpp sources/player.cpp sources/scorepoint.cpp sources/enemy.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -420,16 +423,18 @@ entity.o: sources/entity.cpp headers/entity.h \
 game.o: sources/game.cpp headers/game.h \
 		headers/board.h \
 		headers/config.h \
-		headers/player.h \
+		headers/enemy.h \
 		headers/entity.h \
+		headers/player.h \
 		headers/collectible.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o sources/game.cpp
 
 main.o: sources/main.cpp headers/game.h \
 		headers/board.h \
 		headers/config.h \
-		headers/player.h \
-		headers/entity.h
+		headers/enemy.h \
+		headers/entity.h \
+		headers/player.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o sources/main.cpp
 
 player.o: sources/player.cpp headers/player.h \
@@ -445,6 +450,14 @@ scorepoint.o: sources/scorepoint.cpp headers/collectible.h \
 		headers/config.h \
 		headers/entity.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scorepoint.o sources/scorepoint.cpp
+
+enemy.o: sources/enemy.cpp headers/enemy.h \
+		headers/entity.h \
+		headers/board.h \
+		headers/config.h \
+		headers/game.h \
+		headers/player.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o enemy.o sources/enemy.cpp
 
 moc_collectible.o: moc_collectible.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_collectible.o moc_collectible.cpp
