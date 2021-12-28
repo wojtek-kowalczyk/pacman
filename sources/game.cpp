@@ -1,5 +1,6 @@
 #include "headers/game.h"
 #include "headers/collectible.h"
+#include "headers/enemyRed.h"
 #include <QTimer>
 #include <iostream>
 // #define GAME_DEBUG
@@ -16,7 +17,7 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     // initialize members
     scene = new QGraphicsScene();
     player = new Player();
-    ghost = new Enemy();
+    ghost = new EnemyRed();
 
     // configuration
     setScene(scene);

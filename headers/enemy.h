@@ -1,11 +1,12 @@
 #pragma once
 #include "headers/entity.h"
+
 class Enemy : public Entity
 {
-  private:
+  protected:
     Vector2 prevCell{-1, -1};
     void checkCollisions() override;
-    void chooseAndSetDirection();
+    virtual void chooseAndSetDirection() = 0;
 
   public:
     Enemy();
