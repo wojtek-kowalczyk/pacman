@@ -1,8 +1,7 @@
 #include "headers/game.h"
 #include "headers/collectible.h"
-#include "headers/enemyRed.h"
 #include <QTimer>
-#include <iostream>
+#include <vector>
 // #define GAME_DEBUG
 
 Game* game = nullptr; // this has to be here so that the linker sees it.
@@ -17,7 +16,11 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     // initialize members
     scene = new QGraphicsScene();
     player = new Player();
-    ghost = new EnemyRed();
+    std::vector<Enemy*> ghosts;
+    ghosts.push_back(ghostOrange = new EnemyOrange(QPixmap("resources/ghost-orange.png")));
+    ghosts.push_back(ghostWhite = new EnemyWhite(QPixmap("resources/ghost-white.png")));
+    ghosts.push_back(ghostBlue = new EnemyBlue(QPixmap("resources/ghost-blue.png")));
+    ghosts.push_back(ghostRed = new EnemyRed(QPixmap("resources/ghost-red.png")));
 
     // configuration
     setScene(scene);
@@ -34,7 +37,8 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     // main event loop timer
     QTimer* timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), player, SLOT(move()));
-    QObject::connect(timer, SIGNAL(timeout()), ghost, SLOT(move()));
+    for (Enemy* ghost : ghosts)
+        QObject::connect(timer, SIGNAL(timeout()), ghost, SLOT(move()));
     timer->start(1000 / FPS);
     // timer->start(1000 * 20 / FPS); // 3 times slower
 
@@ -62,7 +66,6 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     }
 
     QObject::connect(timer, SIGNAL(timeout()), player, SLOT(DEBUG_drawCell()));
-    QObject::connect(timer, SIGNAL(timeout()), ghost, SLOT(DEBUG_drawCell()));
 #ifdef GAME_DEBUG
     // draw cells to represent the board
     for (int row = 0; row < Board::rows; row++)
@@ -84,14 +87,19 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
 
     // add Items to scene
     scene->addItem(player);
-    scene->addItem(ghost);
+    for (Enemy* ghost : ghosts)
+        scene->addItem(ghost);
     // this sets player's topleft to center of the correct cell.
     player->setPos(Board::cellToPx(1, 1).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
                    Board::cellToPx(1, 1).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
-    ghost->setPos(Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
-                  Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
     // this sets palyer's center to be in the cell's center
     player->setPos(player->x() - player->pixmap().rect().width() / 2,
                    player->y() - player->pixmap().rect().height() / 2);
-    ghost->setPos(ghost->x() - ghost->pixmap().rect().width() / 2, ghost->y() - ghost->pixmap().rect().height() / 2);
+    for (Enemy* ghost : ghosts)
+    {
+        ghost->setPos(Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
+                      Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
+        ghost->setPos(ghost->x() - ghost->pixmap().rect().width() / 2,
+                      ghost->y() - ghost->pixmap().rect().height() / 2);
+    }
 }

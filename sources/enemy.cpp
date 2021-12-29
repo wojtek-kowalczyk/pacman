@@ -1,10 +1,55 @@
 #include "headers/enemy.h"
+#include "headers/game.h"
 #include <iostream>
 
-Enemy::Enemy()
+Enemy::Enemy(QPixmap sprite)
 {
-    QPixmap* pm = new QPixmap("resources/ghost-red.png");
-    setPixmap(pm->scaled(pm->rect().width() * SCALE_FACTOR, pm->rect().height() * SCALE_FACTOR));
+    setPixmap(sprite.scaled(sprite.rect().width() * SCALE_FACTOR, sprite.rect().height() * SCALE_FACTOR));
+}
+
+void Enemy::chooseAndSetDirection()
+{
+    // * FOLLOW A RANDOM POINT THAT IS within 4 cells away from player
+
+    // query front and side cells, pick to one closest to target
+    // if I already checked this cell -> move on
+    Vector2 me = getOccupiedCell();
+    if (prevCell.x == me.x && prevCell.y == me.y)
+        return;
+    prevCell = me;
+
+    // get cells
+    Vector2 target = chooseTarget();
+    Vector2 cell_fwd{me.x + v_directions[moveDirection].y, me.y + v_directions[moveDirection].x};
+    Vector2 cell_left{me.x + v_directions[(moveDirection + 3) % 4].y, me.y + v_directions[(moveDirection + 3) % 4].x};
+    Vector2 cell_right{me.x + v_directions[(moveDirection + 1) % 4].y, me.y + v_directions[(moveDirection + 1) % 4].x};
+
+    // compute distances
+    float sqrDistances[3] = {999999.0, 999999.0, 999999.0};
+    if (Board::query(cell_fwd.x, cell_fwd.y))
+        sqrDistances[0] = Vector2::sqrDistance(target, cell_fwd);
+    if (Board::query(cell_left.x, cell_left.y))
+        sqrDistances[1] = Vector2::sqrDistance(target, cell_left);
+    if (Board::query(cell_right.x, cell_right.y))
+        sqrDistances[2] = Vector2::sqrDistance(target, cell_right);
+
+    // find minimum
+    float minVal = sqrDistances[0];
+    int minIdx = 0;
+    for (int i = 1; i < 3; i++)
+    {
+        if (sqrDistances[i] < minVal)
+        {
+            minVal = sqrDistances[i];
+            minIdx = i;
+        }
+    }
+
+    // set correct direction
+    if (minIdx == 1)
+        setMoveDirection(static_cast<Direction>((moveDirection + 3) % 4));
+    else if (minIdx == 2)
+        setMoveDirection(static_cast<Direction>((moveDirection + 1) % 4));
 }
 
 void Enemy::move()

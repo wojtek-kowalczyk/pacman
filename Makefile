@@ -51,8 +51,8 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = sources/board.cpp \
+		sources/enemies.cpp \
 		sources/enemy.cpp \
-		sources/enemyRed.cpp \
 		sources/entity.cpp \
 		sources/game.cpp \
 		sources/main.cpp \
@@ -61,8 +61,8 @@ SOURCES       = sources/board.cpp \
 		moc_entity.cpp \
 		moc_player.cpp
 OBJECTS       = board.o \
+		enemies.o \
 		enemy.o \
-		enemyRed.o \
 		entity.o \
 		game.o \
 		main.o \
@@ -147,13 +147,13 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		pacman.pro headers/board.h \
 		headers/collectible.h \
 		headers/config.h \
+		headers/enemies.h \
 		headers/enemy.h \
-		headers/enemyRed.h \
 		headers/entity.h \
 		headers/game.h \
 		headers/player.h sources/board.cpp \
+		sources/enemies.cpp \
 		sources/enemy.cpp \
-		sources/enemyRed.cpp \
 		sources/entity.cpp \
 		sources/game.cpp \
 		sources/main.cpp \
@@ -340,8 +340,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents headers/board.h headers/collectible.h headers/config.h headers/enemy.h headers/enemyRed.h headers/entity.h headers/game.h headers/player.h $(DISTDIR)/
-	$(COPY_FILE) --parents sources/board.cpp sources/enemy.cpp sources/enemyRed.cpp sources/entity.cpp sources/game.cpp sources/main.cpp sources/player.cpp sources/scorepoint.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents headers/board.h headers/collectible.h headers/config.h headers/enemies.h headers/enemy.h headers/entity.h headers/game.h headers/player.h $(DISTDIR)/
+	$(COPY_FILE) --parents sources/board.cpp sources/enemies.cpp sources/enemy.cpp sources/entity.cpp sources/game.cpp sources/main.cpp sources/player.cpp sources/scorepoint.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -418,20 +418,20 @@ board.o: sources/board.cpp headers/board.h \
 		headers/config.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o board.o sources/board.cpp
 
-enemy.o: sources/enemy.cpp headers/enemy.h \
-		headers/entity.h \
-		headers/board.h \
-		headers/config.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o enemy.o sources/enemy.cpp
-
-enemyRed.o: sources/enemyRed.cpp headers/enemyRed.h \
+enemies.o: sources/enemies.cpp headers/enemies.h \
 		headers/enemy.h \
 		headers/entity.h \
 		headers/board.h \
 		headers/config.h \
 		headers/game.h \
 		headers/player.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o enemyRed.o sources/enemyRed.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o enemies.o sources/enemies.cpp
+
+enemy.o: sources/enemy.cpp headers/enemy.h \
+		headers/entity.h \
+		headers/board.h \
+		headers/config.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o enemy.o sources/enemy.cpp
 
 entity.o: sources/entity.cpp headers/entity.h \
 		headers/board.h \
@@ -445,7 +445,7 @@ game.o: sources/game.cpp headers/game.h \
 		headers/entity.h \
 		headers/player.h \
 		headers/collectible.h \
-		headers/enemyRed.h
+		headers/enemies.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o sources/game.cpp
 
 main.o: sources/main.cpp headers/game.h \

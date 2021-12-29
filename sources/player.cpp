@@ -150,3 +150,8 @@ void Player::move()
     // not adding vertical case -> same reason as in Board::query
     checkCollisions();
 }
+
+Direction Player::getMoveDirection()
+{
+    return moveDirection;
+}

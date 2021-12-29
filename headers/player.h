@@ -22,6 +22,7 @@ class Player : public Entity
     void keyPressEvent(QKeyEvent* event);
     void setMoveDirection(Direction) override;
     void move() override;
+    Direction getMoveDirection();
   public slots:
     void addScore(int value);
     // signals:

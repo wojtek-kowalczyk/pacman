@@ -7,7 +7,7 @@
 
 #include "headers/board.h"
 #include "headers/config.h"
-#include "headers/enemy.h"
+#include "headers/enemies.h"
 #include "headers/player.h"
 
 class Game : public QGraphicsView
@@ -16,7 +16,10 @@ class Game : public QGraphicsView
     Game(QWidget* parent = nullptr);
     QGraphicsScene* scene;
     Player* player;
-    Enemy* ghost;
+    EnemyRed* ghostRed;
+    EnemyBlue* ghostBlue;
+    EnemyWhite* ghostWhite;
+    EnemyOrange* ghostOrange;
 };
 extern Game* game;
 #endif
