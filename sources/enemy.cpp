@@ -12,6 +12,7 @@ void Enemy::chooseAndSetDirection()
     // * FOLLOW A RANDOM POINT THAT IS within 4 cells away from player
 
     // query front and side cells, pick to one closest to target
+
     // if I already checked this cell -> move on
     Vector2 me = getOccupiedCell();
     if (prevCell.x == me.x && prevCell.y == me.y)
@@ -47,9 +48,15 @@ void Enemy::chooseAndSetDirection()
 
     // set correct direction
     if (minIdx == 1)
+    {
         setMoveDirection(static_cast<Direction>((moveDirection + 3) % 4));
+        snapToCenter();
+    }
     else if (minIdx == 2)
+    {
         setMoveDirection(static_cast<Direction>((moveDirection + 1) % 4));
+        snapToCenter();
+    }
 }
 
 void Enemy::move()
@@ -75,7 +82,7 @@ void Enemy::move()
         dir = Vector2{-1, 0};
         break;
     }
-    setPos(x() + dir.x * PLAYER_MOVE_SPEED, y() + dir.y * PLAYER_MOVE_SPEED);
+    setPos(x() + dir.x * GHOST_MOVE_SPEED, y() + dir.y * GHOST_MOVE_SPEED);
 
     // edge teleportation
     if (x() < 0)
@@ -83,10 +90,22 @@ void Enemy::move()
     else if (x() > scene()->width())
         setPos(x() - scene()->width(), y());
     // not adding vertical case -> same reason as in Board::query
+
     checkCollisions();
 }
 
 void Enemy::checkCollisions()
 {
     // todo - implement
+}
+
+void Enemy::DEBUG_drawTarget(Vector2 target, Qt::GlobalColor color)
+{
+    if (DEBUG_targetCell)
+        delete DEBUG_targetCell;
+    DEBUG_targetCell = new QGraphicsRectItem();
+    DEBUG_targetCell->setRect(Board::cellToPx(target.x, target.y).x, Board::cellToPx(target.x, target.y).y,
+                              8 * SCALE_FACTOR, 8 * SCALE_FACTOR);
+    DEBUG_targetCell->setBrush(color);
+    scene()->addItem(DEBUG_targetCell);
 }

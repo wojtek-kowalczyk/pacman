@@ -32,6 +32,7 @@ class Entity : public QObject, public QGraphicsPixmapItem
     QGraphicsRectItem* DEBUG_cell = nullptr;
     QGraphicsRectItem* hitbox = nullptr;
     bool canMove();                     // returns true if the next cell in movedirection is not a wall
+    void snapToCenter();                // snaps the entity to the center of current cell
     virtual void checkCollisions() = 0; // pure virtual means there's no "default implementation"
 
   public:

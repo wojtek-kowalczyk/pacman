@@ -108,11 +108,7 @@ void Player::move()
         if (moveDirection != requestedDirection)
         {
             setMoveDirection(requestedDirection);
-            // snap player to the center of the cell
-            Vector2 targetPos{Board::cellToPx(getOccupiedCell().x, getOccupiedCell().y)};
-            targetPos.x += PIXELS_PER_UNIT * SCALE_FACTOR / 2;
-            targetPos.y += PIXELS_PER_UNIT * SCALE_FACTOR / 2;
-            setPos(targetPos.x - pixmap().width() / 2, targetPos.y - pixmap().height() / 2);
+            snapToCenter();
             // ! when player hits the wall they stop a bit out of line, there is no snapping to the center of a cell
         }
     }

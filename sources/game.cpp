@@ -2,7 +2,6 @@
 #include "headers/collectible.h"
 #include <QTimer>
 #include <vector>
-// #define GAME_DEBUG
 
 Game* game = nullptr; // this has to be here so that the linker sees it.
 
@@ -65,8 +64,8 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
         }
     }
 
-    QObject::connect(timer, SIGNAL(timeout()), player, SLOT(DEBUG_drawCell()));
 #ifdef GAME_DEBUG
+    QObject::connect(timer, SIGNAL(timeout()), player, SLOT(DEBUG_drawCell()));
     // draw cells to represent the board
     for (int row = 0; row < Board::rows; row++)
     {
@@ -79,7 +78,7 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
                                                             : (Board::query(row, col) == 2) ? Qt::red
                                                                                             : Qt::black));
 
-            cell->setOpacity(0.5);
+            cell->setOpacity(0.25);
             scene->addItem(cell);
         }
     }

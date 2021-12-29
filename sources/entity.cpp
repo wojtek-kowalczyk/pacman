@@ -56,3 +56,11 @@ void Entity::setRequestedDirection(Direction dir)
         requestedDirection = dir;
     }
 }
+
+void Entity::snapToCenter()
+{
+    Vector2 targetPos{Board::cellToPx(getOccupiedCell().x, getOccupiedCell().y)};
+    targetPos.x += PIXELS_PER_UNIT * SCALE_FACTOR / 2;
+    targetPos.y += PIXELS_PER_UNIT * SCALE_FACTOR / 2;
+    setPos(targetPos.x - pixmap().width() / 2, targetPos.y - pixmap().height() / 2);
+};

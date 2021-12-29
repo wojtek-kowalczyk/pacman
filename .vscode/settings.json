@@ -3,6 +3,7 @@
         "streambuf": "cpp",
         "iostream": "cpp",
         "qgraphicspixmapitem": "cpp",
-        "qgraphicsscene": "cpp"
+        "qgraphicsscene": "cpp",
+        "vector": "cpp"
     }
 }
