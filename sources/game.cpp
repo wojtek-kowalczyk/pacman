@@ -13,6 +13,7 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
         abort();
 
     // initialize members
+    m_isOver = false;
     scene = new QGraphicsScene();
     player = new Player();
     std::vector<Enemy*> ghosts;
@@ -91,6 +92,12 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     }
 #endif
 
+    // additional connections
+    for (Enemy* ghost : ghosts)
+    {
+        QObject::connect(ghost, SIGNAL(playerCaught()), player, SLOT(getCaught()));
+    }
+
     // add Items to scene
     scene->addItem(player);
     for (Enemy* ghost : ghosts)
@@ -108,4 +115,17 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
         ghost->setPos(ghost->x() - ghost->pixmap().rect().width() / 2,
                       ghost->y() - ghost->pixmap().rect().height() / 2);
     }
+}
+
+bool Game::isOver()
+{
+    return m_isOver;
+}
+
+#include <QCoreApplication>
+#include <iostream>
+void Game::gameOver()
+{
+    std::cout << "GAME OVER !\n";
+    // QCoreApplication::exit(0);
 }

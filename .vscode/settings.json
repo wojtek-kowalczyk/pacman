@@ -4,6 +4,7 @@
         "iostream": "cpp",
         "qgraphicspixmapitem": "cpp",
         "qgraphicsscene": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "new": "cpp"
     }
 }

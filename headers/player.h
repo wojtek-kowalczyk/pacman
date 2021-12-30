@@ -25,6 +25,7 @@ class Player : public Entity
     Direction getMoveDirection();
   public slots:
     void addScore(int value);
+    void getCaught();
     // signals:
 };
 

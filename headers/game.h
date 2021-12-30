@@ -14,14 +14,19 @@
 
 class Game : public QGraphicsView
 {
+  private:
+    bool m_isOver;
+
   public:
-    Game(QWidget* parent = nullptr);
     QGraphicsScene* scene;
     Player* player;
     EnemyRed* ghostRed;
     EnemyBlue* ghostBlue;
     EnemyWhite* ghostWhite;
     EnemyOrange* ghostOrange;
+    Game(QWidget* parent = nullptr);
+    bool isOver();
+    void gameOver();
 };
 extern Game* game;
 #endif

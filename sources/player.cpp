@@ -1,5 +1,6 @@
 #include "headers/player.h"
 #include "headers/collectible.h"
+#include "headers/game.h"
 #include <iostream>
 
 //? is this a good idea for the base (abstract) class to have a
@@ -35,6 +36,11 @@ void Player::checkCollisions()
             delete colliding[i];
         }
     }
+}
+
+void Player::getCaught()
+{
+    game->gameOver();
 }
 
 void Player::setSprite(Direction dir)

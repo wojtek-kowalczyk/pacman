@@ -25,6 +25,8 @@ class Enemy : public Entity
   public slots:
     void scare();   // makes the ghost be scared for some time and calls unscare
     void unscare(); // returns the ghost to normal state
+  signals:
+    void playerCaught();
 
   public:
     Enemy(QPixmap sprite);

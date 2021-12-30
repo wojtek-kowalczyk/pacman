@@ -7,6 +7,17 @@
 
 Enemy::Enemy(QPixmap sprite)
 {
+    // although this is copy&paste from player I'm not moving this to base class since
+    // I might want this to be different than players's or just change,
+    // and I don't feel like overriding... though I might, idk
+
+    // ? THIS IS LITERALLY COPY AND PASTE FROM PLAYER'S CODE - WHY IS THIS OFFSET WRONGLY ??????
+    hitbox = new QGraphicsRectItem();
+    hitbox->setParentItem(this);
+    hitbox->setRect(x() + HITBOX_SHRINK, y() + HITBOX_SHRINK, pixmap().width() - 2 * HITBOX_SHRINK,
+                    pixmap().height() - 2 * HITBOX_SHRINK);
+    hitbox->setVisible(true);
+
     regularSprite = sprite;
     scaredSprite = QPixmap("resources/ghost-scared.png");
     setPixmap(sprite.scaled(sprite.rect().width() * SCALE_FACTOR, sprite.rect().height() * SCALE_FACTOR));
@@ -137,7 +148,14 @@ void Enemy::move()
 
 void Enemy::checkCollisions()
 {
-    // todo - implement
+    QList<QGraphicsItem*> colliding = hitbox->collidingItems();
+    for (int i = 0; i < colliding.size(); i++)
+    {
+        if (typeid(*(colliding[i])) == typeid(Player))
+        {
+            emit playerCaught();
+        }
+    }
 }
 
 void Enemy::DEBUG_drawTarget(Vector2 target, Qt::GlobalColor color)
