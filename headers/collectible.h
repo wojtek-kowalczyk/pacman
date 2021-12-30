@@ -6,10 +6,8 @@
 class Collectible : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
-  protected:
-    int points;
-
   public:
+    int points;
     Collectible(int value, QPixmap sprite);
     // having destructor only to invoke the event seems wrong...
     ~Collectible(); // violation of rule of three

@@ -58,6 +58,7 @@ SOURCES       = sources/board.cpp \
 		sources/main.cpp \
 		sources/player.cpp \
 		sources/scorepoint.cpp moc_collectible.cpp \
+		moc_enemy.cpp \
 		moc_entity.cpp \
 		moc_player.cpp
 OBJECTS       = board.o \
@@ -69,6 +70,7 @@ OBJECTS       = board.o \
 		player.o \
 		scorepoint.o \
 		moc_collectible.o \
+		moc_enemy.o \
 		moc_entity.o \
 		moc_player.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -373,9 +375,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_collectible.cpp moc_entity.cpp moc_player.cpp
+compiler_moc_header_make_all: moc_collectible.cpp moc_enemy.cpp moc_entity.cpp moc_player.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_collectible.cpp moc_entity.cpp moc_player.cpp
+	-$(DEL_FILE) moc_collectible.cpp moc_enemy.cpp moc_entity.cpp moc_player.cpp
 moc_collectible.cpp: headers/player.h \
 		headers/board.h \
 		headers/config.h \
@@ -384,6 +386,14 @@ moc_collectible.cpp: headers/player.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/media/sf_ubuntuShare/CPP/pacman -I/media/sf_ubuntuShare/CPP/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include headers/collectible.h -o moc_collectible.cpp
+
+moc_enemy.cpp: headers/entity.h \
+		headers/board.h \
+		headers/config.h \
+		headers/enemy.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/media/sf_ubuntuShare/CPP/pacman -I/media/sf_ubuntuShare/CPP/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include headers/enemy.h -o moc_enemy.cpp
 
 moc_entity.cpp: headers/board.h \
 		headers/config.h \
@@ -430,7 +440,10 @@ enemies.o: sources/enemies.cpp headers/enemies.h \
 enemy.o: sources/enemy.cpp headers/enemy.h \
 		headers/entity.h \
 		headers/board.h \
-		headers/config.h
+		headers/config.h \
+		headers/game.h \
+		headers/enemies.h \
+		headers/player.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o enemy.o sources/enemy.cpp
 
 entity.o: sources/entity.cpp headers/entity.h \
@@ -441,16 +454,17 @@ entity.o: sources/entity.cpp headers/entity.h \
 game.o: sources/game.cpp headers/game.h \
 		headers/board.h \
 		headers/config.h \
+		headers/enemies.h \
 		headers/enemy.h \
 		headers/entity.h \
 		headers/player.h \
-		headers/collectible.h \
-		headers/enemies.h
+		headers/collectible.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o sources/game.cpp
 
 main.o: sources/main.cpp headers/game.h \
 		headers/board.h \
 		headers/config.h \
+		headers/enemies.h \
 		headers/enemy.h \
 		headers/entity.h \
 		headers/player.h
@@ -472,6 +486,9 @@ scorepoint.o: sources/scorepoint.cpp headers/collectible.h \
 
 moc_collectible.o: moc_collectible.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_collectible.o moc_collectible.cpp
+
+moc_enemy.o: moc_enemy.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_enemy.o moc_enemy.cpp
 
 moc_entity.o: moc_entity.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_entity.o moc_entity.cpp

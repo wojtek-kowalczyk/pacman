@@ -61,6 +61,13 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
             point->setPos(Board::cellToPx(row, col).x, Board::cellToPx(row, col).y);
             scene->addItem(point);
             QObject::connect(point, SIGNAL(collected(int)), player, SLOT(addScore(int)));
+            if (point->points == POINTS_BIG)
+            {
+                for (Enemy* ghost : ghosts)
+                {
+                    QObject::connect(point, SIGNAL(collected(int)), ghost, SLOT(scare()));
+                }
+            }
         }
     }
 
