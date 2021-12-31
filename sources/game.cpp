@@ -29,7 +29,7 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     scene->setSceneRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    setBackgroundBrush(QBrush(QImage("resources/board.png").scaled(SCREEN_WIDTH, SCREEN_HEIGHT)));
+    setBackgroundBrush(QBrush(QImage("resources/board-padded.png").scaled(SCREEN_WIDTH, SCREEN_HEIGHT)));
 
     player->setFlag(QGraphicsItem::ItemIsFocusable); // it's able to be focused
     player->setFocus();
@@ -103,8 +103,8 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     for (Enemy* ghost : ghosts)
         scene->addItem(ghost);
     // this sets player's topleft to center of the correct cell.
-    player->setPos(Board::cellToPx(1, 1).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
-                   Board::cellToPx(1, 1).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
+    player->setPos(Board::cellToPx(PLAYER_ENTRY_ROW, PLAYER_ENTRY_COLUMN).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
+                   Board::cellToPx(PLAYER_ENTRY_ROW, PLAYER_ENTRY_COLUMN).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
     // this sets palyer's center to be in the cell's center
     player->setPos(player->x() - player->pixmap().rect().width() / 2,
                    player->y() - player->pixmap().rect().height() / 2);

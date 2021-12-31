@@ -10,7 +10,7 @@
 #include "headers/enemies.h"
 #include "headers/player.h"
 
-// #define GAME_DEBUG
+#define GAME_DEBUG
 
 class Game : public QGraphicsView
 {
