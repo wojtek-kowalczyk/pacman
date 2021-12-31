@@ -1,5 +1,6 @@
 #include "headers/game.h"
 #include "headers/collectible.h"
+#include "headers/text.h"
 #include <QTimer>
 #include <vector>
 
@@ -7,6 +8,7 @@ Game* game = nullptr; // this has to be here so that the linker sees it.
 
 Game::Game(QWidget* parent) : QGraphicsView(parent)
 {
+    // todo - clean this mess up
     if (!game)
         game = this;
     else
@@ -40,7 +42,7 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     for (Enemy* ghost : ghosts)
         QObject::connect(timer, SIGNAL(timeout()), ghost, SLOT(move()));
     timer->start(1000 / FPS);
-    // timer->start(1000 * 20 / FPS); // 3 times slower
+    // timer->start(1000 * 20 / FPS); // 20 times slower
 
     // Add points
     for (int row = 0; row < Board::rows; row++)
@@ -97,6 +99,10 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     {
         QObject::connect(ghost, SIGNAL(playerCaught()), player, SLOT(getCaught()));
     }
+
+    // add text
+    Text* scoreText = new Text();
+    scene->addItem(scoreText);
 
     // add Items to scene
     scene->addItem(player);

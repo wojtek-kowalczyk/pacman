@@ -19,7 +19,7 @@ Player::Player()
     hitbox->setParentItem(this);
     hitbox->setRect(x() + HITBOX_SHRINK, y() + HITBOX_SHRINK, pixmap().width() - 2 * HITBOX_SHRINK,
                     pixmap().height() - 2 * HITBOX_SHRINK);
-    // hitbox->setVisible(false);
+    hitbox->setVisible(false);
 }
 
 void Player::checkCollisions()
