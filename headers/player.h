@@ -26,7 +26,6 @@ class Player : public Entity
   public slots:
     void addScore(int value);
     void getCaught();
-    // signals:
 };
 
 #endif

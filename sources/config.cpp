@@ -1,4 +1,4 @@
-#pragma once
+#include "headers/config.h"
 
 constexpr int SCALE_FACTOR = 3;              // change this
 constexpr int TRUE_SCREEN_WIDTH = 224;       // don't change
@@ -13,7 +13,7 @@ constexpr int POINTS_SMALL = 100;
 constexpr int POINTS_BIG = 200;
 constexpr int POINTS_GHOST = 400;
 constexpr int HITBOX_SHRINK = 6 * SCALE_FACTOR;
-constexpr int GHOST_ENTRY_COLUMN = 13;
-constexpr int GHOST_ENTRY_ROW = 13;
+constexpr int GHOST_ENTRY_COLUMN = 15;
+constexpr int GHOST_ENTRY_ROW = 11;
 constexpr int PLAYER_ENTRY_COLUMN = 14;
 constexpr int PLAYER_ENTRY_ROW = 19;

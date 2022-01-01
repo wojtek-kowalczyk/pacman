@@ -152,7 +152,14 @@ void Enemy::checkCollisions()
     {
         if (typeid(*(colliding[i])) == typeid(Player))
         {
-            emit playerCaught();
+            if (mode == CHASE)
+            {
+                emit playerCaught();
+            }
+            else if (mode == SCARED)
+            {
+                respawn();
+            }
         }
     }
 }
@@ -177,9 +184,19 @@ void Enemy::scare()
     // the behaviour also changes since direction choosing depends on mode
     QTimer::singleShot(2000, this, SLOT(unscare()));
 }
+
 void Enemy::unscare()
 {
     mode = CHASE;
     setPixmap(regularSprite.scaled(regularSprite.rect().width() * SCALE_FACTOR,
                                    regularSprite.rect().height() * SCALE_FACTOR));
+}
+
+void Enemy::respawn()
+{
+    std::cout << "GHOST CAUGHT\n";
+    game->player->addScore(POINTS_GHOST);
+    setPos(Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
+           Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
+    setPos(x() - pixmap().rect().width() / 2, y() - pixmap().rect().height() / 2);
 }

@@ -83,10 +83,10 @@ void Player::keyPressEvent(QKeyEvent* event)
     {
         setRequestedDirection(DOWN);
     }
-    else // debug:: advance with space for example. setting dir doesn't move
-    {
-        move();
-    }
+    // else // debug:: advance with space for example. setting dir doesn't move
+    // {
+    //     move();
+    // }
 }
 
 void Player::move()

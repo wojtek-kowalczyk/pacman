@@ -116,6 +116,7 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
                    player->y() - player->pixmap().rect().height() / 2);
     for (Enemy* ghost : ghosts)
     {
+        // todo - this could call ghost.reseptPosition, alternatively. consider implementing this to entity
         ghost->setPos(Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
                       Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
         ghost->setPos(ghost->x() - ghost->pixmap().rect().width() / 2,

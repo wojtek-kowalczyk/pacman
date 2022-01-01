@@ -445,7 +445,8 @@ enemies.o: sources/enemies.cpp headers/enemies.h \
 		headers/board.h \
 		headers/config.h \
 		headers/game.h \
-		headers/player.h
+		headers/player.h \
+		headers/text.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o enemies.o sources/enemies.cpp
 
 enemy.o: sources/enemy.cpp headers/enemy.h \
@@ -454,7 +455,8 @@ enemy.o: sources/enemy.cpp headers/enemy.h \
 		headers/config.h \
 		headers/game.h \
 		headers/enemies.h \
-		headers/player.h
+		headers/player.h \
+		headers/text.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o enemy.o sources/enemy.cpp
 
 entity.o: sources/entity.cpp headers/entity.h \
@@ -469,8 +471,8 @@ game.o: sources/game.cpp headers/game.h \
 		headers/enemy.h \
 		headers/entity.h \
 		headers/player.h \
-		headers/collectible.h \
-		headers/text.h
+		headers/text.h \
+		headers/collectible.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o sources/game.cpp
 
 main.o: sources/main.cpp headers/game.h \
@@ -479,7 +481,8 @@ main.o: sources/main.cpp headers/game.h \
 		headers/enemies.h \
 		headers/enemy.h \
 		headers/entity.h \
-		headers/player.h
+		headers/player.h \
+		headers/text.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o sources/main.cpp
 
 player.o: sources/player.cpp headers/player.h \
@@ -489,7 +492,8 @@ player.o: sources/player.cpp headers/player.h \
 		headers/collectible.h \
 		headers/game.h \
 		headers/enemies.h \
-		headers/enemy.h
+		headers/enemy.h \
+		headers/text.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o player.o sources/player.cpp
 
 scorepoint.o: sources/scorepoint.cpp headers/collectible.h \

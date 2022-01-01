@@ -21,6 +21,7 @@ class Enemy : public Entity
     void checkCollisions() override;
     void chooseAndSetDirection();
     virtual Vector2 chooseTarget() = 0;
+    void respawn();
 
   public slots:
     void scare();   // makes the ghost be scared for some time and calls unscare

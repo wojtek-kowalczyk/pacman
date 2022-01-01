@@ -11,7 +11,7 @@
 #include "headers/player.h"
 #include "headers/text.h"
 
-// #define GAME_DEBUG
+#define GAME_DEBUG
 
 class Game : public QGraphicsView
 {
