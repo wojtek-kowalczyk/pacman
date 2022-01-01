@@ -18,6 +18,7 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     m_isOver = false;
     scene = new QGraphicsScene();
     player = new Player();
+    scoreText = new CustomText();
     std::vector<Enemy*> ghosts;
     ghosts.push_back(ghostOrange = new EnemyOrange(QPixmap("resources/ghost-orange.png")));
     ghosts.push_back(ghostWhite = new EnemyWhite(QPixmap("resources/ghost-white.png")));
@@ -101,7 +102,6 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     }
 
     // add text
-    Text* scoreText = new Text();
     scene->addItem(scoreText);
 
     // add Items to scene

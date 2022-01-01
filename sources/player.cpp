@@ -52,6 +52,7 @@ void Player::setSprite(Direction dir)
 void Player::addScore(int score)
 {
     this->score += score;
+    game->scoreText->set(this->score);
 }
 
 void Player::setMoveDirection(Direction dir)

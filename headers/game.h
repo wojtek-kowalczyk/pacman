@@ -9,6 +9,7 @@
 #include "headers/config.h"
 #include "headers/enemies.h"
 #include "headers/player.h"
+#include "headers/text.h"
 
 // #define GAME_DEBUG
 
@@ -24,6 +25,8 @@ class Game : public QGraphicsView
     EnemyBlue* ghostBlue;
     EnemyWhite* ghostWhite;
     EnemyOrange* ghostOrange;
+    CustomText* scoreText;
+
     Game(QWidget* parent = nullptr);
     bool isOver();
     void gameOver();

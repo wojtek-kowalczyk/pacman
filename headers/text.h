@@ -1,8 +1,11 @@
 #pragma once
 #include <QGraphicsTextItem>
 
-class Text : public QGraphicsTextItem
+class CustomText : public QGraphicsTextItem
 {
+    Q_OBJECT
   public:
-    Text(QGraphicsItem* parent = nullptr);
+    CustomText(QGraphicsItem* parent = nullptr);
+  public slots:
+    void set(int score);
 };

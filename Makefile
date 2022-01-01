@@ -61,7 +61,8 @@ SOURCES       = sources/board.cpp \
 		sources/text.cpp moc_collectible.cpp \
 		moc_enemy.cpp \
 		moc_entity.cpp \
-		moc_player.cpp
+		moc_player.cpp \
+		moc_text.cpp
 OBJECTS       = board.o \
 		enemies.o \
 		enemy.o \
@@ -74,7 +75,8 @@ OBJECTS       = board.o \
 		moc_collectible.o \
 		moc_enemy.o \
 		moc_entity.o \
-		moc_player.o
+		moc_player.o \
+		moc_text.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -379,9 +381,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_collectible.cpp moc_enemy.cpp moc_entity.cpp moc_player.cpp
+compiler_moc_header_make_all: moc_collectible.cpp moc_enemy.cpp moc_entity.cpp moc_player.cpp moc_text.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_collectible.cpp moc_enemy.cpp moc_entity.cpp moc_player.cpp
+	-$(DEL_FILE) moc_collectible.cpp moc_enemy.cpp moc_entity.cpp moc_player.cpp moc_text.cpp
 moc_collectible.cpp: headers/player.h \
 		headers/board.h \
 		headers/config.h \
@@ -413,6 +415,11 @@ moc_player.cpp: headers/board.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/media/sf_ubuntuShare/CPP/pacman -I/media/sf_ubuntuShare/CPP/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include headers/player.h -o moc_player.cpp
+
+moc_text.cpp: headers/text.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/media/sf_ubuntuShare/CPP/pacman -I/media/sf_ubuntuShare/CPP/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include headers/text.h -o moc_text.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -506,6 +513,9 @@ moc_entity.o: moc_entity.cpp
 
 moc_player.o: moc_player.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_player.o moc_player.cpp
+
+moc_text.o: moc_text.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_text.o moc_text.cpp
 
 ####### Install
 

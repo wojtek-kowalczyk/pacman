@@ -2,9 +2,14 @@
 #include <QFont>
 
 // QGrapchisTextItem will take care of assigning the parent
-Text::Text(QGraphicsItem* parent) : QGraphicsTextItem(parent)
+CustomText::CustomText(QGraphicsItem* parent) : QGraphicsTextItem(parent)
 {
-    setPlainText(QString("Score: ") + QString::number(15)); // use this to update the text
-    setDefaultTextColor(Qt::red);
+    set(0);
+    setDefaultTextColor(Qt::white);
     setFont(QFont("times", 24));
+}
+
+void CustomText::set(int score)
+{
+    setPlainText(QString("Score: ") + QString::number(score));
 }
