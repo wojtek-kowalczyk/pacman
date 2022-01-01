@@ -112,6 +112,8 @@ void Enemy::chooseAndSetDirection()
 
 void Enemy::move()
 {
+    if (!allowMovement)
+        return;
     chooseAndSetDirection();
 
     Vector2 dir;
@@ -158,7 +160,7 @@ void Enemy::checkCollisions()
             }
             else if (mode == SCARED)
             {
-                respawn();
+                this->getCaught();
             }
         }
     }
@@ -192,11 +194,18 @@ void Enemy::unscare()
                                    regularSprite.rect().height() * SCALE_FACTOR));
 }
 
-void Enemy::respawn()
+void Enemy::getCaught()
 {
     std::cout << "GHOST CAUGHT\n";
     game->player->addScore(POINTS_GHOST);
     setPos(Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
            Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
     setPos(x() - pixmap().rect().width() / 2, y() - pixmap().rect().height() / 2);
+    unscare();
+}
+
+void Enemy::deploy()
+{
+    putCenterInCell(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN);
+    allowMovement = true;
 }

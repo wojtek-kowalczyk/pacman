@@ -21,11 +21,11 @@ class Enemy : public Entity
     void checkCollisions() override;
     void chooseAndSetDirection();
     virtual Vector2 chooseTarget() = 0;
-    void respawn();
 
   public slots:
     void scare();   // makes the ghost be scared for some time and calls unscare
     void unscare(); // returns the ghost to normal state
+    void deploy();
   signals:
     void playerCaught();
 
@@ -35,4 +35,5 @@ class Enemy : public Entity
     // base class. There's only such need for additional function base class doesn't have
     // (and for such addition Q_OBJECT macro is needed in derived class as well)
     void move() override;
+    void getCaught() override;
 };

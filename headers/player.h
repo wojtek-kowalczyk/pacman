@@ -12,7 +12,7 @@ class Player : public Entity
     // I mean only if it has additional signals the base class doesn't have
     Q_OBJECT
   private:
-    int score;
+    int score; // score is here not in game class since I don't want game to have slots
     QPixmap sprites[4];
     void setSprite(Direction dir); // sets and correctly resizes sprite for given direction. updates display.
     void checkCollisions() override;
@@ -22,10 +22,12 @@ class Player : public Entity
     void keyPressEvent(QKeyEvent* event);
     void setMoveDirection(Direction) override;
     void move() override;
+    void getCaught() override;
     Direction getMoveDirection();
+
+    // additional slots
   public slots:
     void addScore(int value);
-    void getCaught();
 };
 
 #endif

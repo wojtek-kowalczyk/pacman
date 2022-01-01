@@ -2,6 +2,8 @@
 
 bool Entity::canMove()
 {
+    if (!allowMovement)
+        return false;
     int row = getOccupiedCell().x;
     int col = getOccupiedCell().y;
     switch (moveDirection)
@@ -39,6 +41,13 @@ void Entity::DEBUG_drawCell()
 Vector2 Entity::getOccupiedCell()
 {
     return Board::pxToCell(x() + pixmap().width() / 2, y() + pixmap().height() / 2);
+}
+
+void Entity::putCenterInCell(int row, int col)
+{
+    this->setPos(Board::cellToPx(row, col).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
+                 Board::cellToPx(row, col).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
+    this->setPos(this->x() - this->pixmap().rect().width() / 2, this->y() - this->pixmap().rect().height() / 2);
 }
 
 void Entity::setMoveDirection(Direction dir)

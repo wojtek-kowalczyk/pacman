@@ -20,10 +20,10 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     player = new Player();
     scoreText = new CustomText();
     std::vector<Enemy*> ghosts;
-    ghosts.push_back(ghostOrange = new EnemyOrange(QPixmap("resources/ghost-orange.png")));
-    ghosts.push_back(ghostWhite = new EnemyWhite(QPixmap("resources/ghost-white.png")));
-    ghosts.push_back(ghostBlue = new EnemyBlue(QPixmap("resources/ghost-blue.png")));
     ghosts.push_back(ghostRed = new EnemyRed(QPixmap("resources/ghost-red.png")));
+    ghosts.push_back(ghostBlue = new EnemyBlue(QPixmap("resources/ghost-blue.png")));
+    ghosts.push_back(ghostWhite = new EnemyWhite(QPixmap("resources/ghost-white.png")));
+    ghosts.push_back(ghostOrange = new EnemyOrange(QPixmap("resources/ghost-orange.png")));
 
     // configuration
     setScene(scene);
@@ -108,19 +108,22 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     scene->addItem(player);
     for (Enemy* ghost : ghosts)
         scene->addItem(ghost);
-    // this sets player's topleft to center of the correct cell.
-    player->setPos(Board::cellToPx(PLAYER_ENTRY_ROW, PLAYER_ENTRY_COLUMN).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
-                   Board::cellToPx(PLAYER_ENTRY_ROW, PLAYER_ENTRY_COLUMN).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
-    // this sets palyer's center to be in the cell's center
-    player->setPos(player->x() - player->pixmap().rect().width() / 2,
-                   player->y() - player->pixmap().rect().height() / 2);
-    for (Enemy* ghost : ghosts)
+
+    // assign positions
+    player->putCenterInCell(PLAYER_ENTRY_ROW, PLAYER_ENTRY_COLUMN);
+    for (int i = 0; i < (int)ghosts.size(); i++)
     {
-        // todo - this could call ghost.reseptPosition, alternatively. consider implementing this to entity
-        ghost->setPos(Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
-                      Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
-        ghost->setPos(ghost->x() - ghost->pixmap().rect().width() / 2,
-                      ghost->y() - ghost->pixmap().rect().height() / 2);
+        if (i == 0)
+        {
+            ghosts[i]->deploy();
+        }
+        else
+        {
+            Vector2 targetPos = Board::cellToPx(GHOST_HOUSE_1_ROW, GHOST_HOUSE_1_COLUMN + (2 * (i - 1)));
+            ghosts[i]->setPos(targetPos.x, targetPos.y);
+            ghosts[i]->allowMovement = false;
+            QTimer::singleShot(i * 7500, ghosts[i], SLOT(deploy()));
+        }
     }
 }
 

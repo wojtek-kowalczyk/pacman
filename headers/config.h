@@ -15,5 +15,7 @@ constexpr int POINTS_GHOST = 400;
 constexpr int HITBOX_SHRINK = 6 * SCALE_FACTOR;
 constexpr int GHOST_ENTRY_COLUMN = 13;
 constexpr int GHOST_ENTRY_ROW = 13;
+constexpr int GHOST_HOUSE_1_COLUMN = 11;
+constexpr int GHOST_HOUSE_1_ROW = 15;
 constexpr int PLAYER_ENTRY_COLUMN = 14;
 constexpr int PLAYER_ENTRY_ROW = 19;

@@ -36,10 +36,13 @@ class Entity : public QObject, public QGraphicsPixmapItem
     virtual void checkCollisions() = 0; // pure virtual means there's no "default implementation"
 
   public:
+    bool allowMovement = true;
     Vector2 getOccupiedCell(); // get the cell that player's CENTER is in
     virtual void setMoveDirection(Direction);
     void setRequestedDirection(Direction);
+    void putCenterInCell(int row, int col); // pixmap needs to be setup for this to work properly
   public slots:
     virtual void move() = 0;
+    virtual void getCaught() = 0;
     void DEBUG_drawCell(); // draw a square representing the current cell entity is in.
 };
