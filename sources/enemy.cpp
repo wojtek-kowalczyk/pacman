@@ -135,7 +135,8 @@ void Enemy::move()
         dir = Vector2{-1, 0};
         break;
     }
-    setPos(x() + dir.x * GHOST_MOVE_SPEED, y() + dir.y * GHOST_MOVE_SPEED);
+    float speed = mode == CHASE ? GHOST_MOVE_SPEED : GHOST_MOVE_SPEED_SCARED;
+    setPos(x() + dir.x * speed, y() + dir.y * speed);
 
     // edge teleportation
     if (x() < 0)
@@ -184,7 +185,7 @@ void Enemy::scare()
     setPixmap(
         scaredSprite.scaled(scaredSprite.rect().width() * SCALE_FACTOR, scaredSprite.rect().height() * SCALE_FACTOR));
     // the behaviour also changes since direction choosing depends on mode
-    QTimer::singleShot(2000, this, SLOT(unscare()));
+    QTimer::singleShot(GHOST_SCARE_TIME, this, SLOT(unscare()));
 }
 
 void Enemy::unscare()
@@ -196,11 +197,11 @@ void Enemy::unscare()
 
 void Enemy::getCaught()
 {
-    std::cout << "GHOST CAUGHT\n";
     game->player->addScore(POINTS_GHOST);
-    setPos(Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).x + PIXELS_PER_UNIT * SCALE_FACTOR / 2,
-           Board::cellToPx(GHOST_ENTRY_ROW, GHOST_ENTRY_COLUMN).y + PIXELS_PER_UNIT * SCALE_FACTOR / 2);
-    setPos(x() - pixmap().rect().width() / 2, y() - pixmap().rect().height() / 2);
+    setPos(Board::cellToPx(GHOST_HOUSE_ROW, GHOST_HOUSE_COLUMN).x,
+           Board::cellToPx(GHOST_HOUSE_ROW, GHOST_HOUSE_COLUMN).y);
+    allowMovement = false;
+    QTimer::singleShot(GHOST_RESPAWN_DELAY, this, SLOT(deploy()));
     unscare();
 }
 

@@ -119,7 +119,7 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
         }
         else
         {
-            Vector2 targetPos = Board::cellToPx(GHOST_HOUSE_1_ROW, GHOST_HOUSE_1_COLUMN + (2 * (i - 1)));
+            Vector2 targetPos = Board::cellToPx(GHOST_HOUSE_ROW, GHOST_HOUSE_COLUMN + (2 * (i - 1)));
             ghosts[i]->setPos(targetPos.x, targetPos.y);
             ghosts[i]->allowMovement = false;
             QTimer::singleShot(i * 7500, ghosts[i], SLOT(deploy()));
