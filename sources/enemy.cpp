@@ -20,6 +20,8 @@ Enemy::Enemy(QPixmap sprite)
     hitbox->setRect(x() + HITBOX_SHRINK, y() + HITBOX_SHRINK, pixmap().width() - 2 * HITBOX_SHRINK,
                     pixmap().height() - 2 * HITBOX_SHRINK);
     hitbox->setVisible(false);
+
+    QObject::connect(this, SIGNAL(playerCaught()), game->player, SLOT(getCaught()));
 }
 
 // todo - this could be improved

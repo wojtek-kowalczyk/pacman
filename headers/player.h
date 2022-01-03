@@ -24,6 +24,7 @@ class Player : public Entity
     void move() override;
     void getCaught() override;
     Direction getMoveDirection();
+    int getScore();
 
     // additional slots
   public slots:

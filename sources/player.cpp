@@ -33,7 +33,9 @@ void Player::checkCollisions()
             // how do I access members of Collectible here?
             // virtual method allows the use of pointer to a base class, but I can't add my methods to the base class.
             // I NEED TO CALL MY METHOD ON COLLECTIBLE. now it's called in the destructor - seems wrong
-            delete colliding[i];
+            // delete colliding[i];
+            // static_cast<Collectible*>(colliding[i])->collect(); //? is this safe???
+            qgraphicsitem_cast<Collectible*>(colliding[i])->collect();
         }
     }
 }
@@ -53,6 +55,11 @@ void Player::addScore(int score)
 {
     this->score += score;
     game->scoreText->set(this->score);
+}
+
+int Player::getScore()
+{
+    return this->score;
 }
 
 void Player::setMoveDirection(Direction dir)
