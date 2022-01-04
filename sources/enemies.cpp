@@ -39,7 +39,7 @@ Vector2 EnemyOrange::chooseTarget()
 {
     // THE RANDOM
     Vector2 player = game->player->getOccupiedCell();
-    Vector2 target{player.x + rand() % (4 * 2) - 4, player.y + rand() % (4 * 2) - 4};
+    Vector2 target{player.x + (rand() % (4 * 2)) - 4, player.y + (rand() % (4 * 2)) - 4};
 #ifdef GAME_DEBUG
     DEBUG_drawTarget(target, Qt::darkYellow);
 #endif

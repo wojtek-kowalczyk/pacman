@@ -11,6 +11,7 @@ class Collectible : public QObject, public QGraphicsPixmapItem
     Collectible(int value, QPixmap sprite);
   public slots:
     void collect();
+    void destroy();
   signals:
     void collected(int value);
 };

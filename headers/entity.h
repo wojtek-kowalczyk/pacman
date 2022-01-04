@@ -8,7 +8,7 @@
 
 // clockwise order - important for ghost AI
 // dir + 1 is next clockwise, -1 anti-clockwise
-// dir + 2 is opposite dir
+// dir + 2 (% 4) is opposite dir
 enum Direction
 {
     UP,

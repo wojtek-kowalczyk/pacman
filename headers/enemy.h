@@ -1,5 +1,6 @@
 #pragma once
 #include "headers/entity.h"
+#include <QTimer>
 
 enum Mode
 {
@@ -13,7 +14,7 @@ class Enemy : public Entity
     Q_OBJECT
   protected:
     Mode mode = CHASE;
-    QPixmap regularSprite;
+    QPixmap regularSprite; // todo - maybe see if can make these be pointers?
     QPixmap scaredSprite;
     Vector2 prevCell{-1, -1};
     QGraphicsRectItem* DEBUG_targetCell = nullptr;
@@ -30,6 +31,7 @@ class Enemy : public Entity
     void playerCaught();
 
   public:
+    QTimer* deployTimer;
     Enemy(QPixmap sprite);
     // doesn't have to be declared as slot. already declared as slot in
     // base class. There's only such need for additional function base class doesn't have

@@ -10,7 +10,8 @@
 #include "headers/config.h"
 #include "headers/enemies.h"
 #include "headers/player.h"
-#include "headers/text.h"
+#include <QGraphicsTextItem>
+#include <QObject>
 #include <QTimer>
 #include <vector>
 
@@ -18,29 +19,42 @@
 
 class Game : public QGraphicsView
 {
+    Q_OBJECT
   private:
     bool m_isOver;
-    void restart();
+    int pointsCounter;
     void addPoints();
     void removePoints();
     void setMainTimer();
     void setInitialPositions();
+    void setGameOverPanel();
+    void setEntities();
+    void setScoreText();
 
   public:
+    const bool godMode = true;
     QGraphicsScene* scene;
+    QGraphicsRectItem* gameOverPanel;
     Player* player;
     EnemyRed* ghostRed;
     EnemyBlue* ghostBlue;
     EnemyWhite* ghostWhite;
     EnemyOrange* ghostOrange;
-    CustomText* scoreText;
+    QGraphicsTextItem* scoreText;
+    QGraphicsTextItem* endScoreText;
     QTimer* mainTimer;
-    std::vector<Collectible*> points;
     std::vector<Enemy*> ghosts;
 
     Game(QWidget* parent = nullptr);
     bool isOver();
-    void gameOver();
+    void restart();
+    void gameOver(bool win);
+    void updateEndScoreText(bool win);
+  public slots:
+    void updateScoreText();
+    void onPointCollected();
+  signals:
+    void pointsDestructionOrdered();
 };
 extern Game* game;
 #endif

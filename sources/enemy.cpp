@@ -1,6 +1,5 @@
 #include "headers/enemy.h"
 #include "headers/game.h"
-#include <QTimer>
 #include <iostream>
 #include <map>
 #include <vector>
@@ -20,8 +19,9 @@ Enemy::Enemy(QPixmap sprite)
     hitbox->setRect(x() + HITBOX_SHRINK, y() + HITBOX_SHRINK, pixmap().width() - 2 * HITBOX_SHRINK,
                     pixmap().height() - 2 * HITBOX_SHRINK);
     hitbox->setVisible(false);
-
     QObject::connect(this, SIGNAL(playerCaught()), game->player, SLOT(getCaught()));
+    deployTimer = new QTimer();
+    deployTimer->setSingleShot(true);
 }
 
 // todo - this could be improved
@@ -97,18 +97,21 @@ void Enemy::chooseAndSetDirection()
         // ghosts call this on the same frame they get different seed
         static unsigned int run = 1;
         srand(time(0) + (run++));
-        int random = rand() % avlb.size();
-        if (avlb[random].x == cell_left.x && avlb[random].y == cell_left.y)
+        if (avlb.size() > 0)
         {
-            // todo - this is copy and paste -> could be extacted somehow
-            setMoveDirection(static_cast<Direction>((moveDirection + 3) % 4));
-            snapToCenter();
+            int random = rand() % avlb.size();
+            if (avlb[random].x == cell_left.x && avlb[random].y == cell_left.y)
+            {
+                setMoveDirection(static_cast<Direction>((moveDirection + 3) % 4));
+                snapToCenter();
+            }
+            else if (avlb[random].x == cell_right.x && avlb[random].y == cell_right.y)
+            {
+                setMoveDirection(static_cast<Direction>((moveDirection + 1) % 4));
+                snapToCenter();
+            }
         }
-        else if (avlb[random].x == cell_right.x && avlb[random].y == cell_right.y)
-        {
-            setMoveDirection(static_cast<Direction>((moveDirection + 1) % 4));
-            snapToCenter();
-        }
+        // else just keep moving in the same dir
     }
 }
 

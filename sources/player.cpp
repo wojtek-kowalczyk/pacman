@@ -8,6 +8,7 @@
 
 Player::Player()
 {
+    score = 0;
     sprites[UP] = QPixmap("resources/pacman-up.png");
     sprites[DOWN] = QPixmap("resources/pacman-down.png");
     sprites[LEFT] = QPixmap("resources/pacman-left.png");
@@ -42,7 +43,8 @@ void Player::checkCollisions()
 
 void Player::getCaught()
 {
-    game->gameOver();
+    if (!(game->godMode))
+        game->gameOver(false);
 }
 
 void Player::setSprite(Direction dir)
@@ -54,12 +56,18 @@ void Player::setSprite(Direction dir)
 void Player::addScore(int score)
 {
     this->score += score;
-    game->scoreText->set(this->score);
+    emit scoreChanged(this->score);
 }
 
 int Player::getScore()
 {
     return this->score;
+}
+
+void Player::resetScore()
+{
+    score = 0;
+    emit scoreChanged(this->score);
 }
 
 void Player::setMoveDirection(Direction dir)
@@ -89,6 +97,11 @@ void Player::keyPressEvent(QKeyEvent* event)
     else if (event->key() == Qt::Key_Down)
     {
         setRequestedDirection(DOWN);
+    }
+    // this is here not in game class since I don't want to deal with keyboard focus
+    else if (event->key() == Qt::Key_Space && game->isOver())
+    {
+        game->restart();
     }
     // else // debug:: advance with space for example. setting dir doesn't move
     // {
