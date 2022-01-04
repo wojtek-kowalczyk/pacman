@@ -23,63 +23,6 @@ Player::Player()
     hitbox->setVisible(false);
 }
 
-void Player::checkCollisions()
-{
-    QList<QGraphicsItem*> colliding = hitbox->collidingItems();
-    for (int i = 0; i < colliding.size(); i++)
-    {
-        if (typeid(*(colliding[i])) == typeid(Collectible))
-        {
-            // todo - replace workaround
-            // how do I access members of Collectible here?
-            // virtual method allows the use of pointer to a base class, but I can't add my methods to the base class.
-            // I NEED TO CALL MY METHOD ON COLLECTIBLE. now it's called in the destructor - seems wrong
-            // delete colliding[i];
-            // static_cast<Collectible*>(colliding[i])->collect(); //? is this safe???
-            qgraphicsitem_cast<Collectible*>(colliding[i])->collect();
-        }
-    }
-}
-
-void Player::getCaught()
-{
-    if (!(game->godMode))
-        game->gameOver(false);
-}
-
-void Player::setSprite(Direction dir)
-{
-    setPixmap(
-        sprites[dir].scaled(sprites[dir].rect().width() * SCALE_FACTOR, sprites[dir].rect().height() * SCALE_FACTOR));
-}
-
-void Player::addScore(int score)
-{
-    this->score += score;
-    emit scoreChanged(this->score);
-}
-
-int Player::getScore()
-{
-    return this->score;
-}
-
-void Player::resetScore()
-{
-    score = 0;
-    emit scoreChanged(this->score);
-}
-
-void Player::setMoveDirection(Direction dir)
-{
-    if (dir != moveDirection)
-    {
-        moveDirection = dir;
-        // set the sprite to face in the right direction
-        setSprite(moveDirection);
-    }
-}
-
 void Player::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Left)
@@ -107,6 +50,63 @@ void Player::keyPressEvent(QKeyEvent* event)
     // {
     //     move();
     // }
+}
+
+void Player::setSprite(Direction dir)
+{
+    setPixmap(
+        sprites[dir].scaled(sprites[dir].rect().width() * SCALE_FACTOR, sprites[dir].rect().height() * SCALE_FACTOR));
+}
+
+Direction Player::getMoveDirection()
+{
+    return moveDirection;
+}
+
+int Player::getScore()
+{
+    return this->score;
+}
+
+void Player::addScore(int score)
+{
+    this->score += score;
+    emit scoreChanged(this->score);
+}
+
+void Player::resetScore()
+{
+    score = 0;
+    emit scoreChanged(this->score);
+}
+
+void Player::checkCollisions()
+{
+    QList<QGraphicsItem*> colliding = hitbox->collidingItems();
+    for (int i = 0; i < colliding.size(); i++)
+    {
+        if (typeid(*(colliding[i])) == typeid(Collectible))
+        {
+            // static_cast<Collectible*>(colliding[i])->collect(); //? is this safe???
+            qgraphicsitem_cast<Collectible*>(colliding[i])->collect(); //? and what about this?
+        }
+    }
+}
+
+void Player::getCaught()
+{
+    if (!(game->godMode))
+        game->gameOver(false);
+}
+
+void Player::setMoveDirection(Direction dir)
+{
+    if (dir != moveDirection)
+    {
+        moveDirection = dir;
+        // set the sprite to face in the right direction
+        setSprite(moveDirection);
+    }
 }
 
 void Player::move()
@@ -172,9 +172,4 @@ void Player::move()
         setPos(x() - scene()->width(), y());
     // not adding vertical case -> same reason as in Board::query
     checkCollisions();
-}
-
-Direction Player::getMoveDirection()
-{
-    return moveDirection;
 }

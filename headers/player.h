@@ -8,8 +8,6 @@
 
 class Player : public Entity
 {
-    // this macro has to be in derived class as well. Re-run qmake after adding it.
-    // I mean only if it has additional signals the base class doesn't have
     Q_OBJECT
   private:
     int score; // score is here not in game class since I don't want game to have slots

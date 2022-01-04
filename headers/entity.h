@@ -27,8 +27,8 @@ class Entity : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
   protected:
-    Direction moveDirection = LEFT;      // actual direction the player is facing and moving
-    Direction requestedDirection = LEFT; // the direcion we want the palyer to move when it's possible
+    Direction moveDirection = LEFT;      // actual direction the entity is facing and moving
+    Direction requestedDirection = LEFT; // the direcion we want the entity to move when it's possible
     QGraphicsRectItem* DEBUG_cell = nullptr;
     QGraphicsRectItem* hitbox = nullptr;
     bool canMove();                     // returns true if the next cell in movedirection is not a wall

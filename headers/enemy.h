@@ -10,7 +10,7 @@ enum Mode
 
 class Enemy : public Entity
 {
-    // this macro has to be here if if I have some additional slots (wrt base class)
+    // this macro has to be here if I have some additional slots (wrt base class)
     Q_OBJECT
   protected:
     Mode mode = CHASE;

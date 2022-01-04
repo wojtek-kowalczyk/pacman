@@ -12,8 +12,7 @@ Enemy::Enemy(QPixmap sprite)
     setPixmap(sprite.scaled(sprite.rect().width() * SCALE_FACTOR, sprite.rect().height() * SCALE_FACTOR));
 
     // although this is copy&paste from player I'm not moving this to base class since
-    // I might want this to be different than players's or just change,
-    // and I don't feel like overriding... though I might, idk
+    // I might want this to be different than players's someday
     hitbox = new QGraphicsRectItem();
     hitbox->setParentItem(this);
     hitbox->setRect(x() + HITBOX_SHRINK, y() + HITBOX_SHRINK, pixmap().width() - 2 * HITBOX_SHRINK,
@@ -148,7 +147,6 @@ void Enemy::move()
         setPos(x() + scene()->width(), y());
     else if (x() > scene()->width())
         setPos(x() - scene()->width(), y());
-    // not adding vertical case -> same reason as in Board::query
 
     checkCollisions();
 }

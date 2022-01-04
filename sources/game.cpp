@@ -55,8 +55,6 @@ Game::Game(QWidget* parent) : QGraphicsView(parent)
     // additional connections
     QObject::connect(player, SIGNAL(scoreChanged(int)), this, SLOT(updateScoreText()));
 
-    // mind-when-restarting type set-up
-
     // Add points
     addPoints();
 
@@ -100,9 +98,72 @@ void Game::setScoreText()
     scoreText->setVisible(true);
     scoreText->setPlainText(QString("Score: ") + QString::number(player->getScore()));
 }
+
 void Game::updateScoreText()
 {
     scoreText->setPlainText(QString("Score: ") + QString::number(player->getScore()));
+}
+
+void Game::setMainTimer()
+{
+    QObject::connect(mainTimer, SIGNAL(timeout()), player, SLOT(move()));
+    for (Enemy* ghost : ghosts)
+        QObject::connect(mainTimer, SIGNAL(timeout()), ghost, SLOT(move()));
+    mainTimer->start(1000 / FPS);
+    // mainTimer->start(1000 * 20 / FPS); // debug slow-motion
+}
+
+void Game::setInitialPositions()
+{
+    player->putCenterInCell(PLAYER_ENTRY_ROW, PLAYER_ENTRY_COLUMN);
+    for (int i = 0; i < (int)ghosts.size(); i++)
+    {
+        if (i == 0)
+        {
+            ghosts[i]->deploy();
+        }
+        else
+        {
+            Vector2 targetPos = Board::cellToPx(GHOST_HOUSE_ROW, GHOST_HOUSE_COLUMN + (2 * (i - 1)));
+            ghosts[i]->setPos(targetPos.x, targetPos.y);
+            ghosts[i]->allowMovement = false;
+
+            // Ghost deployment
+            // ghost's timer is single shot, so this start basically says timeout after
+            // this time and then do nothing. then, on restart this whole function is
+            // called again, and calling start again sets the timer to fire again after said time.
+            ghosts[i]->deployTimer->start(i * GHOST_DEPLOY_INTERVAL);
+            QObject::connect(ghosts[i]->deployTimer, SIGNAL(timeout()), ghosts[i], SLOT(deploy()));
+        }
+    }
+}
+
+void Game::setGameOverPanel()
+{
+    gameOverPanel->setRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    gameOverPanel->setBrush(Qt::black);
+
+    endScoreText->setParentItem(gameOverPanel);
+    endScoreText->setDefaultTextColor(Qt::white);
+    endScoreText->setFont(QFont("times", 32));
+
+    scene->addItem(gameOverPanel);
+    gameOverPanel->setVisible(false);
+    gameOverPanel->setZValue(ZVAL_TOP);
+}
+
+void Game::updateEndScoreText(bool win)
+{
+    if (!win)
+    {
+        endScoreText->setPlainText(QString("GAME OVER !\nyour score is: ") + QString::number(player->getScore()) +
+                                   QString("\npress [SPACE] to restart"));
+    }
+    else
+    {
+        endScoreText->setPlainText(QString("YOU WIN !\nyour score is: ") + QString::number(player->getScore()) +
+                                   QString("\npress [SPACE] to restart"));
+    }
 }
 
 void Game::addPoints()
@@ -159,8 +220,6 @@ bool Game::isOver()
     return m_isOver;
 }
 
-#include <QCoreApplication>
-#include <iostream>
 void Game::gameOver(bool win)
 {
     m_isOver = true;
@@ -183,66 +242,4 @@ void Game::restart()
     player->setMoveDirection(LEFT);
     player->setRequestedDirection(LEFT);
     player->resetScore();
-}
-
-void Game::setGameOverPanel()
-{
-    gameOverPanel->setRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    gameOverPanel->setBrush(Qt::black);
-
-    endScoreText->setParentItem(gameOverPanel);
-    endScoreText->setDefaultTextColor(Qt::white);
-    endScoreText->setFont(QFont("times", 32));
-
-    scene->addItem(gameOverPanel);
-    gameOverPanel->setVisible(false);
-    gameOverPanel->setZValue(ZVAL_TOP);
-}
-
-void Game::updateEndScoreText(bool win)
-{
-    if (!win) // todo - change
-    {
-        endScoreText->setPlainText(QString("GAME OVER !\nyour score is: ") + QString::number(player->getScore()) +
-                                   QString("\npress [SPACE] to restart"));
-    }
-    else
-    {
-        endScoreText->setPlainText(QString("YOU WIN !\nyour score is: ") + QString::number(player->getScore()) +
-                                   QString("\npress [SPACE] to restart"));
-    }
-}
-
-void Game::setMainTimer()
-{
-    QObject::connect(mainTimer, SIGNAL(timeout()), player, SLOT(move()));
-    for (Enemy* ghost : ghosts)
-        QObject::connect(mainTimer, SIGNAL(timeout()), ghost, SLOT(move()));
-    mainTimer->start(1000 / FPS);
-    // mainTimer->start(1000 * 20 / FPS); // 20 times slower
-}
-
-void Game::setInitialPositions()
-{
-    player->putCenterInCell(PLAYER_ENTRY_ROW, PLAYER_ENTRY_COLUMN);
-    for (int i = 0; i < (int)ghosts.size(); i++)
-    {
-        if (i == 0)
-        {
-            ghosts[i]->deploy();
-        }
-        else
-        {
-            Vector2 targetPos = Board::cellToPx(GHOST_HOUSE_ROW, GHOST_HOUSE_COLUMN + (2 * (i - 1)));
-            ghosts[i]->setPos(targetPos.x, targetPos.y);
-            ghosts[i]->allowMovement = false;
-
-            // Ghost deployment
-            // ghost's timer is single shot, so this start basically says timeout after
-            // this time and then do nothing. then, on restart this whole function is
-            // called again, and calling start again sets the timer to fire again after said time.
-            ghosts[i]->deployTimer->start(i * GHOST_DEPLOY_INTERVAL);
-            QObject::connect(ghosts[i]->deployTimer, SIGNAL(timeout()), ghosts[i], SLOT(deploy()));
-        }
-    }
 }

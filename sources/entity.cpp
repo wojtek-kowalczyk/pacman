@@ -20,15 +20,12 @@ bool Entity::canMove()
     case DOWN:
         row += 1;
         break;
-    default:
-        break;
     }
     return Board::query(row, col) != 0;
 }
 
 void Entity::DEBUG_drawCell()
 {
-    // debug:  make the current player's cell "light up"
     if (DEBUG_cell)
         delete DEBUG_cell;
     DEBUG_cell = new QGraphicsRectItem();

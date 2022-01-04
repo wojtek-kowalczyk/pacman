@@ -36,7 +36,7 @@ char Board::board[rows][cols] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
-// * Should there be any confusion as to why sometimes x,y are swapped with row and col:/
+// * Should there be any confusion as to why sometimes x,y are swapped with row and col:
 // * in board.h: rows = height/px_per_unit -> in screen space height is y axis, therefore y => row, x => col.
 // * I tried to keep the names so that there is as little confusion as possible
 

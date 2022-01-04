@@ -15,8 +15,6 @@ Vector2 EnemyBlue::chooseTarget()
     return target;
 }
 
-// ! there sometimes may be overlapping of ghosts, where one covers the other.
-// ! it usually happens that white ghost is covered. not sure if that's bad?
 Vector2 EnemyWhite::chooseTarget()
 {
     // THE TACTICIAN
